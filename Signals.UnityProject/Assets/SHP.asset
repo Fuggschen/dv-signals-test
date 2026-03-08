@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -416170577, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Name: SHP
+  m_EditorClassIdentifier: 
+  ModId: SHP
+  ModName: SHP SignalPack
+  Author: Fuggschen
+  Version: 1.0.0
+  HomePage: 
+  Repository: 
+  Signal: {fileID: 9033348616969177219, guid: 9c4544519a42efc438e83a4d62baca23, type: 3}
+  IntoYardSignal: {fileID: 1189347329326697537, guid: 220f51bf3ecf36943bad810f4eba1451,
+    type: 3}
+  ShuntingSignal: {fileID: 3854835783494433885, guid: 39c3eca0a2d0aa447abb76e4eb79e4bc,
+    type: 3}
+  DistantSignal: {fileID: 1933944980196256521, guid: c59d6606a47914b45be03ac7e19d0078,
+    type: 3}
+  DistantSignalDistance: 300
+  DistantSignalMinimumTrackLength: 600
+  OldSignal: {fileID: 0}
+  OldIntoYardSignal: {fileID: 0}
+  OldShuntingSignal: {fileID: 0}
+  OldDistantSignal: {fileID: 0}
+  OtherSignals: []
