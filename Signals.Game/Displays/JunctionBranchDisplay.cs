@@ -11,7 +11,21 @@ namespace Signals.Game.Displays
         public JunctionBranchDisplay(InfoDisplayDefinition definition, BasicSignalController controller) : base(definition, controller)
         {
             _fullDef = (JunctionBranchDisplayDefinition)definition;
-            _junctionController = (JunctionSignalController)controller;
+            
+            // Try to get junction controller directly, or from distant signal's home
+            if (controller is JunctionSignalController junctionController)
+            {
+                _junctionController = junctionController;
+            }
+            else if (controller is DistantSignalController distantController && 
+                     distantController.Home is JunctionSignalController homeJunctionController)
+            {
+                _junctionController = homeJunctionController;
+            }
+            else
+            {
+                _junctionController = null;
+            }
         }
 
         public override void UpdateDisplay()

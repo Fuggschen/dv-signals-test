@@ -10,7 +10,7 @@ namespace Signals.Game.Displays
 
         public DistanceToNextDisplay(InfoDisplayDefinition definition, BasicSignalController controller) : base(definition, controller)
         {
-            _distant = (DistantSignalController)controller;
+            _distant = controller as DistantSignalController;
         }
 
         public override void UpdateDisplay()

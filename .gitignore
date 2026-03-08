@@ -3,6 +3,7 @@ Directory.Build.targets
 
 # Local preferences
 .vscode/
+.github/
 
 # Packaging directories
 [Bb]uild/
@@ -84,8 +85,6 @@ StyleCopReport.xml
 *_p.c
 *_h.h
 *.ilk
-*.meta
-*.obj
 *.iobj
 *.pch
 *.pdb
@@ -398,3 +397,6 @@ FodyWeavers.xsd
 
 # .nfs files are created when an open file is removed but is still being accessed
 .nfs*
+
+ProjectSettings/
+Library/

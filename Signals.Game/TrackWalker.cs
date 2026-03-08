@@ -1,4 +1,4 @@
-﻿using Signals.Game.Controllers;
+﻿﻿using Signals.Game.Controllers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -222,6 +222,157 @@ namespace Signals.Game
                 track = branch.track;
                 yield return track;
             }
+        }
+
+        /// <summary>
+        /// Walks track from a specific position with a distance limit (for shunting signals).
+        /// </summary>
+        /// <param name="startTrack">The track to start walking from</param>
+        /// <param name="direction">The direction to walk</param>
+        /// <param name="maxDistance">Maximum distance to walk in meters</param>
+        /// <returns>TrackInfo containing all tracks within the distance limit</returns>
+        public static TrackInfo WalkFromPosition(RailTrack startTrack, TrackDirection direction, float maxDistance)
+        {
+            int depth = 0;
+            HashSet<RailTrack> visited = new HashSet<RailTrack>();
+            List<RailTrack> ordered = new List<RailTrack>();
+            BasicSignalController? mainlineSignal = null;
+            BasicSignalController? shuntingSignal = null;
+            Junction? nextJunction = null;
+            float distanceWalked = 0f;
+
+            // Start by getting the first track ahead (not the starting track itself)
+            Junction? firstJunction = direction.IsOut() ? startTrack.outJunction : startTrack.inJunction;
+            Branch? firstBranch;
+            
+            if (firstJunction != null)
+            {
+                bool junctionDir = firstJunction.inBranch.track == startTrack;
+                
+                // Check if there's a signal at this junction before walking
+                if (SignalManager.Instance.TryGetSignals(firstJunction, out var signals))
+                {
+                    var foundSignal = signals.GetSignal(junctionDir ? TrackDirection.Out : TrackDirection.In);
+                    
+                    if (foundSignal != null)
+                    {
+                        // Found a signal immediately - don't walk any tracks
+                        if (foundSignal.Type == SignalType.Mainline || foundSignal.Type == SignalType.IntoYard)
+                        {
+                            mainlineSignal = foundSignal;
+                        }
+                        else if (foundSignal.Type == SignalType.Shunting)
+                        {
+                            shuntingSignal = foundSignal;
+                        }
+                        
+                        // Return empty track list since we hit a signal immediately
+                        return new TrackInfo(ordered, direction, mainlineSignal, shuntingSignal, firstJunction);
+                    }
+                }
+                
+                nextJunction = firstJunction;
+                firstBranch = junctionDir ?
+                    firstJunction.outBranches[firstJunction.selectedBranch] :
+                    firstJunction.inBranch;
+            }
+            else
+            {
+                firstBranch = direction.IsOut() ? startTrack.outBranch : startTrack.inBranch;
+            }
+            
+            if (firstBranch == null || firstBranch.track == null)
+            {
+                // Dead end - no tracks ahead
+                return new TrackInfo(ordered, direction, null, null, nextJunction);
+            }
+            
+            RailTrack? track = firstBranch.track;
+            TrackDirection walkDirection = direction;
+            
+            // Check if we need to flip direction
+            if (firstJunction != null && ContainsTrack(startTrack, firstBranch, direction))
+            {
+                walkDirection = walkDirection.Flipped();
+            }
+
+            // Now walk the tracks ahead
+            while (depth++ < MaxDepth && track != null && !visited.Contains(track))
+            {
+                float trackLength = (float)track.GetLength();
+                
+                // Check if adding this track would exceed max distance
+                if (distanceWalked + trackLength > maxDistance)
+                {
+                    break;
+                }
+                
+                visited.Add(track);
+                ordered.Add(track);
+                distanceWalked += trackLength;
+
+                Junction? junction = walkDirection.IsOut() ? track.outJunction : track.inJunction;
+                Branch? branch;
+
+                if (junction != null)
+                {
+                    bool junctionDir = junction.inBranch.track == track;
+
+                    if (nextJunction == null)
+                    {
+                        nextJunction = junction;
+                    }
+
+                    // If the junction has a signal for the current direction, check it.
+                    if (SignalManager.Instance.TryGetSignals(junction, out var signals))
+                    {
+                        var foundSignal = signals.GetSignal(junctionDir ? TrackDirection.Out : TrackDirection.In);
+
+                        if (foundSignal != null)
+                        {
+                            switch (foundSignal.Type)
+                            {
+                                case SignalType.Mainline:
+                                case SignalType.IntoYard:
+                                    mainlineSignal = foundSignal;
+                                    goto ExitLoop;
+                                    
+                                case SignalType.Shunting:
+                                    shuntingSignal = foundSignal;
+                                    goto ExitLoop;
+                            }
+                        }
+                    }
+
+                    // Take the branch from the junction.
+                    branch = junctionDir ?
+                        junction.outBranches[junction.selectedBranch] :
+                        junction.inBranch;
+                }
+                else
+                {
+                    // If there's no junction just use the track branch directly.
+                    branch = walkDirection.IsOut() ? track.outBranch : track.inBranch;
+                }
+
+                // No branch means we have no track to go, stop looping.
+                if (branch == null || branch.track == null)
+                {
+                    break;
+                }
+
+                // Check if the current track is the next track of the next branch.
+                if (ContainsTrack(track, branch, walkDirection))
+                {
+                    walkDirection = walkDirection.Flipped();
+                }
+
+                track = branch.track;
+            }
+
+            ExitLoop:
+
+            return new TrackInfo(ordered, walkDirection, mainlineSignal, shuntingSignal, nextJunction);
         }
     }
 }

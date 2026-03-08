@@ -53,6 +53,8 @@ namespace Signals.Game
             new Dictionary<Junction, JunctionSignalGroup>();
         private List<DistantSignalController> _distantSignals =
             new List<DistantSignalController>();
+        private List<BasicSignalController> _shuntingSignals =
+            new List<BasicSignalController>();
         private List<BasicSignalController> _signalRegister =
             new List<BasicSignalController>();
 
@@ -71,6 +73,7 @@ namespace Signals.Game
 
             _junctionSignals.Clear();
             _distantSignals.Clear();
+            _shuntingSignals.Clear();
 
             StopCoroutine(_updateCoro);
         }
@@ -206,7 +209,7 @@ namespace Signals.Game
                         _junctionSignals.Add(junction, CreateIntoYardReverseSignals(pack, junction));
                         break;
                     case SignalCreationMode.Shunting:
-                        //count += CreateShuntingSignals(pack, junction);
+                        count += CreateShuntingSignals(pack, junction);
                         break;
                     default:
                         continue;
@@ -493,18 +496,23 @@ namespace Signals.Game
 
             int count = 0;
 
-            foreach (var branch in junction.outBranches)
+            for (int i = 0; i < junction.outBranches.Count; i++)
             {
+                var branch = junction.outBranches[i];
                 if (branch.track == null || branch.track.outBranch == null || branch.track.outBranch.track == null) continue;
 
                 if (branch.track.outBranch.track.GetLength() < 25) break;
 
-                CreateSignalAtPoint(pack.ShuntingSignal, branch.track.curve.Last(), TrackDirection.In, -16f);
+                var signal = CreateShuntingSignalAtPoint(pack.ShuntingSignal, branch.track, branch.track.curve.Last(), 
+                    TrackDirection.In, -16f, junction, i);
+                Instance._shuntingSignals.Add(signal);
                 count++;
             }
 
-            //CreateSignalAtPoint(pack.ShuntingSignal, junction.outBranches[0].track.curve[0], TrackDirection.Out, -4);
-            //count++;
+            var outSignal = CreateShuntingSignalAtPoint(pack.ShuntingSignal, junction.outBranches[0].track, 
+                junction.outBranches[0].track.curve[0], TrackDirection.Out, -4, junction, 0);
+            Instance._shuntingSignals.Add(outSignal);
+            count++;
 
             return count;
         }
@@ -609,6 +617,18 @@ namespace Signals.Game
             signal.transform.localRotation = Quaternion.LookRotation(dir.IsOut() ? point.handle1 : -point.handle1);
 
             return new BasicSignalController(signal);
+        }
+
+        private static ShuntingSignalController CreateShuntingSignalAtPoint(SignalControllerDefinition def, RailTrack track, 
+            BezierPoint point, TrackDirection dir, float offset, Junction junction, int branchIndex)
+        {
+            var backward = point.handle1.normalized;
+            var signal = Instantiate(def, point.transform, false);
+
+            signal.transform.localPosition = backward * offset;
+            signal.transform.localRotation = Quaternion.LookRotation(dir.IsOut() ? point.handle1 : -point.handle1);
+
+            return new ShuntingSignalController(signal, junction, branchIndex, track, dir);
         }
 
         #endregion
