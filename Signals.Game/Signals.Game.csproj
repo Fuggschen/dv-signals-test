@@ -6,6 +6,7 @@
 		<LangVersion>8</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Signals.API\Signals.API.csproj" />
 		<ProjectReference Include="..\Signals.Common\Signals.Common.csproj" />
 	</ItemGroup>
 	<ItemGroup>
@@ -16,6 +17,7 @@
 		<Reference Include="UnityEngine.AssetBundleModule" />
 		<Reference Include="UnityEngine.AudioModule" />
 		<Reference Include="UnityEngine.CoreModule" />
+		<Reference Include="UnityEngine.IMGUIModule" />
 		<Reference Include="UnityEngine.PhysicsModule" />
     <Reference Include="UnityEngine.UI" />
     <Reference Include="Unity.TextMeshPro" />

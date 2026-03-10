@@ -1,4 +1,5 @@
-﻿using Signals.Common;
+﻿using Signals.API;
+using Signals.Common;
 using Signals.Game.Aspects;
 using Signals.Game.Displays;
 using System;
@@ -30,6 +31,11 @@ namespace Signals.Game.Controllers
         /// </summary>
         public bool ManualOperationOnly = false;
 
+        /// <summary>
+        /// The current operating mode of the signal.
+        /// </summary>
+        public SignalMode Mode { get; private set; } = SignalMode.Automatic;
+
         public SignalControllerDefinition Definition { get; private set; }
         public int CurrentAspectIndex { get; private set; }
         public AspectBase[] AllAspects { get; private set; }
@@ -56,6 +62,7 @@ namespace Signals.Game.Controllers
         public Action<AspectBase?>? AspectChanged;
         public Action<InfoDisplay[]>? DisplaysUpdated;
         public Action<BasicSignalController>? Destroyed;
+        public Action<string, SignalMode>? ModeChanged;
 
         public BasicSignalController(SignalControllerDefinition def)
         {
@@ -297,6 +304,52 @@ namespace Signals.Game.Controllers
                     item.Apply();
                 }
             }
+        }
+
+        /// <summary>
+        /// Sets the operating mode of the signal.
+        /// </summary>
+        /// <param name="mode">The new mode.</param>
+        /// <returns><see langword="true"/> if the mode actually changed.</returns>
+        public bool SetMode(SignalMode mode)
+        {
+            if (Mode == mode) return false;
+
+            Mode = mode;
+            ManualOperationOnly = mode == SignalMode.Manual;
+
+            ModeChanged?.Invoke(Name, mode);
+
+            // Re-evaluate immediately when returning to automatic.
+            if (mode == SignalMode.Automatic)
+            {
+                UpdateAspect();
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Sets the aspect by its string ID and switches to <see cref="SignalMode.Manual"/> mode.
+        /// </summary>
+        /// <param name="aspectId">The ID of the aspect to activate.</param>
+        /// <returns><see langword="true"/> if the aspect was found and set.</returns>
+        public bool SetAspectById(string aspectId)
+        {
+            for (int i = 0; i < AllAspects.Length; i++)
+            {
+                if (string.Equals(AllAspects[i].Id, aspectId, StringComparison.OrdinalIgnoreCase))
+                {
+                    SetMode(SignalMode.Manual);
+                    ChangeAspect(i);
+                    UpdateDisplays(true);
+                    UpdateIndicators();
+                    return true;
+                }
+            }
+
+            SignalsMod.Error($"Aspect '{aspectId}' not found on signal '{Name}'");
+            return false;
         }
 
         /// <summary>

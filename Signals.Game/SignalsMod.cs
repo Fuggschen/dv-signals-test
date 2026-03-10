@@ -26,6 +26,10 @@ namespace Signals.Game
             Instance.OnSaveGUI += Settings.Save;
             Instance.OnUnload += Unload;
 
+#if DEBUG
+            Instance.OnGUI += DebugPanel.Draw;
+#endif
+
             ScanMods();
 
             UnityModManager.toggleModsListen += HandleModToggled;
@@ -36,6 +40,10 @@ namespace Signals.Game
 
         private static bool Unload(UnityModManager.ModEntry modEntry)
         {
+#if DEBUG
+            DebugPanel.Cleanup();
+            Instance.OnGUI -= DebugPanel.Draw;
+#endif
             UnityModManager.toggleModsListen -= HandleModToggled;
             WorldStreamingInit.LoadingStatusChanged -= SignalManager.CheckStartCreation;
             SignalManager.InstalledPacks.Clear();

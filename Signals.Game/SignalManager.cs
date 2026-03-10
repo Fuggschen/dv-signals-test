@@ -1,4 +1,5 @@
 ﻿using DV.Utils;
+using Signals.API;
 using Signals.Common;
 using Signals.Game.Controllers;
 using Signals.Game.Curves;
@@ -57,8 +58,11 @@ namespace Signals.Game
             new List<BasicSignalController>();
         private List<BasicSignalController> _signalRegister =
             new List<BasicSignalController>();
+        private Dictionary<string, BasicSignalController> _signalsByName =
+            new Dictionary<string, BasicSignalController>();
 
         private Coroutine? _updateCoro;
+        private SignalsAPIImplementation? _apiImpl;
 
         public List<BasicSignalController> AllSignals => _signalRegister;
 
@@ -71,9 +75,14 @@ namespace Signals.Game
         {
             base.OnDestroy();
 
+            _apiImpl?.Dispose();
+            _apiImpl = null;
+            SignalsAPI.Unregister();
+
             _junctionSignals.Clear();
             _distantSignals.Clear();
             _shuntingSignals.Clear();
+            _signalsByName.Clear();
 
             StopCoroutine(_updateCoro);
         }
@@ -172,6 +181,13 @@ namespace Signals.Game
             DisplayLoadingThingy();
             Instance.CreateSignals();
             _loaded = true;
+
+            // Build the name lookup now that all signals are fully constructed.
+            Instance.BuildNameLookup();
+
+            // Register the public API now that all signals exist.
+            Instance._apiImpl = new SignalsAPIImplementation(Instance);
+            SignalsAPI.Register(Instance._apiImpl);
         }
 
         private static void DisplayLoadingThingy()
@@ -780,16 +796,56 @@ namespace Signals.Game
         public void RegisterSignal(BasicSignalController signal)
         {
             _signalRegister.Add(signal);
+
+            // Subscribe new signals to the API event relay.
+            _apiImpl?.SubscribeToSignal(signal);
         }
 
         public bool UnregisterSignal(BasicSignalController signal)
         {
+            var name = signal.Name;
+            if (!string.IsNullOrEmpty(name) && _signalsByName.TryGetValue(name, out var existing) && existing == signal)
+            {
+                _signalsByName.Remove(name);
+            }
+
             return _signalRegister.Remove(signal);
+        }
+
+        private void BuildNameLookup()
+        {
+            _signalsByName.Clear();
+
+            foreach (var signal in _signalRegister)
+            {
+                var name = signal.Name;
+                if (string.IsNullOrEmpty(name)) continue;
+
+                if (!_signalsByName.ContainsKey(name))
+                {
+                    _signalsByName[name] = signal;
+                }
+                else
+                {
+                    SignalsMod.Warning($"Duplicate signal name '{name}', keeping first registered.");
+                }
+            }
         }
 
         internal bool TryGetSignals(Junction junction, out JunctionSignalGroup pair)
         {
             return _junctionSignals.TryGetValue(junction, out pair);
+        }
+
+        /// <summary>
+        /// Tries to find a signal by its unique name.
+        /// </summary>
+        /// <param name="name">The signal name (e.g. "J-DERAIL-001-T").</param>
+        /// <param name="signal">The signal, if found.</param>
+        /// <returns><see langword="true"/> if a signal was found, <see langword="false"/> otherwise.</returns>
+        public bool TryGetSignal(string name, out BasicSignalController? signal)
+        {
+            return _signalsByName.TryGetValue(name, out signal);
         }
 
         /// <summary>
