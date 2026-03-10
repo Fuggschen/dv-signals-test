@@ -35,11 +35,15 @@ namespace Signals.Game
             UnityModManager.toggleModsListen += HandleModToggled;
             WorldStreamingInit.LoadingStatusChanged += SignalManager.CheckStartCreation;
 
+            MultiplayerShim.Initialize();
+
             return true;
         }
 
         private static bool Unload(UnityModManager.ModEntry modEntry)
         {
+            MultiplayerShim.Teardown();
+
 #if DEBUG
             DebugPanel.Cleanup();
             Instance.OnGUI -= DebugPanel.Draw;

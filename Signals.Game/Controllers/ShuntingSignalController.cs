@@ -50,6 +50,8 @@ namespace Signals.Game.Controllers
 
         private void JunctionSwitched(Junction.SwitchMode mode, int branch)
         {
+            if (ManualOperationOnly) return;
+
             // Force update when junction switches
             UpdateAspect();
             UpdateDisplays(true);
@@ -57,6 +59,8 @@ namespace Signals.Game.Controllers
 
         public override bool ShouldSkipUpdate()
         {
+            if (base.ShouldSkipUpdate()) return true;
+
             var dist = GetCameraDistanceSqr();
 
             // If the camera is too far from the signal, skip updating.

@@ -1,9 +1,11 @@
 {
 	"Id": "dv-signals",
-	"Version": "1.0.0",
+	"Version": "1.0.0-mp",
 	"DisplayName": "DV Signals",
-	"Author": "Wiz",
+	"Author": "Wiz, modified by Fuggschen",
 	"EntryMethod": "Signals.Game.SignalsMod.Load",
+	"AssemblyName": "Signals.Game.dll",
 	"ManagerVersion": "0.27.3",
-	"Repository": "https://raw.githubusercontent.com/OWNER/REPOSITORY/main/repository.json"
+	"LoadAfter": ["Multiplayer"],
+	"Repository": "https://raw.githubusercontent.com/fuggschen/dv-signals-test/main/repository.json"
 }
