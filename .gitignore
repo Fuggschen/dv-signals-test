@@ -1,5 +1,6 @@
 # Local reference configuration
 Directory.Build.targets
+References/
 
 # Local preferences
 .vscode/
