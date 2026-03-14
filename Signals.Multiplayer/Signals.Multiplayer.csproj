@@ -9,6 +9,6 @@
 		<ProjectReference Include="..\Signals.API\Signals.API.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="DVMultiplayerAPI" Version="latest"/>
+		<PackageReference Include="DVMultiplayerAPI" Version="*" />
 	</ItemGroup>
 </Project>
