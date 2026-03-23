@@ -134,11 +134,38 @@ namespace Signals.Game
 
         private static SignalState CreateSnapshot(BasicSignalController signal)
         {
+            // Map game SignalType → API SignalType (same names, offset by value).
+            var type = (API.SignalType)(int)signal.Type;
+
+            var direction = API.SignalDirection.None;
+            string? junctionId = null;
+            int? selectedBranch = null;
+
+            if (signal is JunctionSignalController jsc)
+            {
+                direction = jsc.Direction.IsOut() ? API.SignalDirection.Out : API.SignalDirection.In;
+                junctionId = jsc.Junction.junctionData.junctionIdLong;
+                selectedBranch = jsc.Junction.selectedBranch;
+            }
+
+            var yardId = signal.TrackInfo?.NextTrackYard;
+            var trackId = signal.TrackInfo?.NextTrackNumberType;
+
+            // Normalise empty strings to null for consistent API output.
+            if (string.IsNullOrEmpty(yardId)) yardId = null;
+            if (string.IsNullOrEmpty(trackId)) trackId = null;
+
             return new SignalState(
                 signal.Name,
                 signal.Position,
                 signal.CurrentAspect?.Id,
-                signal.Mode
+                signal.Mode,
+                type,
+                direction,
+                junctionId,
+                selectedBranch,
+                yardId,
+                trackId
             );
         }
     }

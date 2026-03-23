@@ -840,7 +840,7 @@ namespace Signals.Game
         /// <summary>
         /// Tries to find a signal by its unique name.
         /// </summary>
-        /// <param name="name">The signal name (e.g. "J-DERAIL-001-T").</param>
+        /// <param name="name">The signal name (e.g. "S-0370-MF-T").</param>
         /// <param name="signal">The signal, if found.</param>
         /// <returns><see langword="true"/> if a signal was found, <see langword="false"/> otherwise.</returns>
         public bool TryGetSignal(string name, out BasicSignalController? signal)

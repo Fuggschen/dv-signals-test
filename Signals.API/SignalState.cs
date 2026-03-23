@@ -8,7 +8,7 @@ namespace Signals.API
     public sealed class SignalState
     {
         /// <summary>
-        /// The unique name of this signal (e.g. "J-DERAIL-001-T").
+        /// The unique name of this signal (e.g. "S-0370-MF-T").
         /// </summary>
         public string Id { get; }
 
@@ -32,12 +32,63 @@ namespace Signals.API
         /// </summary>
         public SignalMode Mode { get; }
 
-        public SignalState(string id, Vector3 position, string? currentAspectId, SignalMode mode)
+        /// <summary>
+        /// The type/role of this signal (Mainline, Shunting, IntoYard, etc.).
+        /// </summary>
+        public SignalType Type { get; }
+
+        /// <summary>
+        /// The direction the signal faces relative to its junction,
+        /// or <see cref="SignalDirection.None"/> if the signal is not associated with a junction.
+        /// </summary>
+        public SignalDirection Direction { get; }
+
+        /// <summary>
+        /// The junction ID this signal is associated with (e.g. "ST-J-01"),
+        /// or <see langword="null"/> if the signal is not a junction signal.
+        /// </summary>
+        public string? JunctionId { get; }
+
+        /// <summary>
+        /// The currently selected branch index (0-based) of the associated junction,
+        /// or <see langword="null"/> if the signal is not a junction signal.
+        /// </summary>
+        public int? SelectedBranch { get; }
+
+        /// <summary>
+        /// The yard/station name of the next track (e.g. "SteelMill"),
+        /// or <see langword="null"/> if unavailable.
+        /// </summary>
+        public string? YardId { get; }
+
+        /// <summary>
+        /// The track identifier including type (e.g. "M01"),
+        /// or <see langword="null"/> if unavailable.
+        /// </summary>
+        public string? TrackId { get; }
+
+        public SignalState(
+            string id,
+            Vector3 position,
+            string? currentAspectId,
+            SignalMode mode,
+            SignalType type,
+            SignalDirection direction,
+            string? junctionId,
+            int? selectedBranch,
+            string? yardId,
+            string? trackId)
         {
             Id = id;
             Position = position;
             CurrentAspectId = currentAspectId;
             Mode = mode;
+            Type = type;
+            Direction = direction;
+            JunctionId = junctionId;
+            SelectedBranch = selectedBranch;
+            YardId = yardId;
+            TrackId = trackId;
         }
     }
 }
