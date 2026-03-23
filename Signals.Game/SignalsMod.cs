@@ -1,10 +1,11 @@
 ﻿using UnityModManagerNet;
+using UnityEngine;
 
 namespace Signals.Game
 {
     public static class SignalsMod
     {
-        public const string Guid = "wiz.signals";
+        public const string Guid = "dv-signals";
 
         public static UnityModManager.ModEntry Instance { get; private set; } = null!;
         public static Settings Settings { get; private set; } = null!;
