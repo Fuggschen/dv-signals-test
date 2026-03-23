@@ -198,7 +198,7 @@ namespace Signals.Game
             if (info != null)
             {
                 info.loadProgressTMP.richText = true;
-                info.loadProgressTMP.text += "\ncreating <color=#FF3333>si</color><color=#FFCC00>gna</color><color=#33FF77>ls</color>";
+                info.loadProgressTMP.text += "\nCreating <color=#FF3333>Si</color><color=#FFCC00>gna</color><color=#33FF77>ls</color>";
             }
         }
 
