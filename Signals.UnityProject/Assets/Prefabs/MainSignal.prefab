@@ -649,7 +649,7 @@ MonoBehaviour:
   OffStateHUDSprite: {fileID: 0}
   Displays: []
   Indicators:
-  - {fileID: 2111602849294903747}
+  - {fileID: 1479662948266265642}
   Animator: {fileID: 0}
   _drawGuides: 1
 --- !u!1 &6480019869389560930
@@ -774,7 +774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1626940637108642843}
-  - component: {fileID: 2111602849294903747}
+  - component: {fileID: 1479662948266265642}
   m_Layer: 0
   m_Name: JUNCTION_DIVERGE
   m_TagString: Untagged
@@ -796,7 +796,7 @@ Transform:
   m_Father: {fileID: 6174999476221021416}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2111602849294903747
+--- !u!114 &1479662948266265642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

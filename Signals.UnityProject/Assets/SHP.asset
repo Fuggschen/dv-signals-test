@@ -21,12 +21,11 @@ MonoBehaviour:
   Signal: {fileID: 9033348616969177219, guid: 9c4544519a42efc438e83a4d62baca23, type: 3}
   IntoYardSignal: {fileID: 1189347329326697537, guid: 220f51bf3ecf36943bad810f4eba1451,
     type: 3}
-  ShuntingSignal: {fileID: 3854835783494433885, guid: 39c3eca0a2d0aa447abb76e4eb79e4bc,
-    type: 3}
+  ShuntingSignal: {fileID: 0}
   DistantSignal: {fileID: 1933944980196256521, guid: c59d6606a47914b45be03ac7e19d0078,
     type: 3}
   DistantSignalDistance: 300
-  DistantSignalMinimumTrackLength: 600
+  DistantSignalMinimumTrackLength: 400
   OldSignal: {fileID: 0}
   OldIntoYardSignal: {fileID: 0}
   OldShuntingSignal: {fileID: 0}
