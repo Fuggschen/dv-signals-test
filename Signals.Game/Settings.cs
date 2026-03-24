@@ -29,7 +29,11 @@ namespace Signals.Game
 
         public override void Save(UnityModManager.ModEntry modEntry)
         {
-            Save(this, modEntry);
+            if (!MPActive)
+            {
+                Save(this, modEntry);
+            }
+            OnSettingsSaved?.Invoke(this);
         }
 
         public void OnChange() { }

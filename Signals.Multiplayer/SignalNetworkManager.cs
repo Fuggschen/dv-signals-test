@@ -16,12 +16,28 @@ namespace Signals.Multiplayer
         private static IServer? _server;
         private static IClient? _client;
         private static bool _initialized;
+        private static bool _clientIsHostClient;
 
         private static string _modId = string.Empty;
         private static Action<string> _log = _ => { };
         private static Action<string> _logVerbose = _ => { };
 
-        public static void Initialize(string modId, Action<string> log, Action<string> logVerbose)
+        // Delegates provided by MultiplayerShim to bridge into Signals.Game without a hard reference.
+        private static Action<bool, bool, bool>? _applyClientSettings;
+        private static Func<bool[]>? _getHostSettings;
+        private static Action? _setMPActive;
+        private static Action? _clearMPActive;
+        private static Action? _reloadSettings;
+
+        public static void Initialize(
+            string modId,
+            Action<string> log,
+            Action<string> logVerbose,
+            Action<bool, bool, bool> applyClientSettings,
+            Func<bool[]> getHostSettings,
+            Action setMPActive,
+            Action clearMPActive,
+            Action reloadSettings)
         {
             if (_initialized) return;
             if (!MultiplayerAPI.IsMultiplayerLoaded) return;
@@ -29,6 +45,11 @@ namespace Signals.Multiplayer
             _modId = modId;
             _log = log;
             _logVerbose = logVerbose;
+            _applyClientSettings = applyClientSettings;
+            _getHostSettings = getHostSettings;
+            _setMPActive = setMPActive;
+            _clearMPActive = clearMPActive;
+            _reloadSettings = reloadSettings;
 
             MultiplayerAPI.Instance.SetModCompatibility(modId, MultiplayerCompatibility.All);
 
@@ -99,9 +120,10 @@ namespace Signals.Multiplayer
         {
             _server = server;
 
-            // Register packets on the server (no handler — host doesn't receive signal packets from clients).
+            // Register packets on the server — host doesn't receive signal or settings packets from clients.
             _server.RegisterPacket<SignalStatePacket>((_, __) => { });
             _server.RegisterSerializablePacket<SignalFullSyncPacket>((_, __) => { });
+            _server.RegisterPacket<SignalSettingsPacket>((_, __) => { });
 
             // Send full sync to joining players.
             _server.OnPlayerReady += OnPlayerReady;
@@ -133,6 +155,9 @@ namespace Signals.Multiplayer
         private static void OnPlayerReady(IPlayer player)
         {
             if (_server == null || SignalsAPI.Instance == null) return;
+
+            // Always send authoritative settings to the joining player.
+            SendSettingsToPlayer(player);
 
             // Build a sync packet containing only manually-controlled signals.
             var allSignals = SignalsAPI.Instance.GetAllSignals();
@@ -197,15 +222,64 @@ namespace Signals.Multiplayer
 
         #endregion
 
+        #region Settings Sync
+
+        /// <summary>
+        /// Called by Bootstrap.BroadcastHostSettings (relayed from MultiplayerShim via reflection) when the host saves settings.
+        /// Broadcasts updated authoritative settings to all connected clients.
+        /// </summary>
+        public static void BroadcastHostSettings(bool generateShuntingSignals, bool enableSignalEnforcement, bool enableMisalignedTrackOccupancy)
+        {
+            if (_server == null) return;
+
+            var packet = new SignalSettingsPacket
+            {
+                GenerateShuntingSignals = generateShuntingSignals,
+                EnableSignalEnforcement = enableSignalEnforcement,
+                EnableMisalignedTrackOccupancy = enableMisalignedTrackOccupancy,
+            };
+
+            _server.SendPacketToAll(packet, reliable: true, excludeSelf: true);
+            _logVerbose($"[MP Sync] Broadcast settings to all clients.");
+        }
+
+        private static void SendSettingsToPlayer(IPlayer player)
+        {
+            if (_server == null) return;
+
+            if (_getHostSettings == null) return;
+
+            var vals = _getHostSettings();
+            var packet = new SignalSettingsPacket
+            {
+                GenerateShuntingSignals = vals[0],
+                EnableSignalEnforcement = vals[1],
+                EnableMisalignedTrackOccupancy = vals[2],
+            };
+
+            _server.SendPacketToPlayer(packet, player);
+            _logVerbose($"[MP Sync] Sent settings to {player.Username}.");
+        }
+
+        #endregion
+
         #region Client
 
         private static void OnClientStarted(IClient client)
         {
             _client = client;
+            _clientIsHostClient = _server != null;
+
+            // Only pure clients should have settings locked. The host also has a local client instance.
+            if (!_clientIsHostClient)
+            {
+                _setMPActive?.Invoke();
+            }
 
             // Register packet handlers.
             _client.RegisterPacket<SignalStatePacket>(OnClientReceivedState);
             _client.RegisterSerializablePacket<SignalFullSyncPacket>(OnClientReceivedFullSync);
+            _client.RegisterPacket<SignalSettingsPacket>(OnClientReceivedSettings);
 
             _log("[MP Sync] Client started, signal sync active.");
         }
@@ -234,6 +308,15 @@ namespace Signals.Multiplayer
             }
 
             _client = null;
+
+            // Only pure clients need to restore their local settings after host overrides.
+            if (!_clientIsHostClient)
+            {
+                _clearMPActive?.Invoke();
+                _reloadSettings?.Invoke();
+            }
+
+            _clientIsHostClient = false;
         }
 
         private static void OnClientReceivedState(SignalStatePacket packet)
@@ -281,6 +364,19 @@ namespace Signals.Multiplayer
                     SignalsAPI.Instance.SetSignalAspect(entry.SignalId, entry.AspectId);
                 }
             }
+        }
+
+        private static void OnClientReceivedSettings(SignalSettingsPacket packet)
+        {
+            _applyClientSettings?.Invoke(
+                packet.GenerateShuntingSignals,
+                packet.EnableSignalEnforcement,
+                packet.EnableMisalignedTrackOccupancy);
+
+            _logVerbose($"[MP Sync] Received settings from host: " +
+                $"GenerateShuntingSignals={packet.GenerateShuntingSignals}, " +
+                $"EnableSignalEnforcement={packet.EnableSignalEnforcement}, " +
+                $"EnableMisalignedTrackOccupancy={packet.EnableMisalignedTrackOccupancy}");
         }
 
         #endregion

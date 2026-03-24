@@ -23,7 +23,7 @@ namespace Signals.Game
                 return false;
             }
 
-            Instance.OnGUI += Settings.Draw;
+            Instance.OnGUI += DrawGUI;
             Instance.OnSaveGUI += Settings.Save;
             Instance.OnUnload += Unload;
 
@@ -101,6 +101,29 @@ namespace Signals.Game
         public static void Error(string message)
         {
             Instance.Logger.Error(message);
+        }
+
+        public static void ReloadSettings()
+        {
+            var loaded = UnityModManager.ModSettings.Load<Settings>(Instance);
+            // Copy values into the existing object to preserve event subscriptions.
+            Settings.CustomPack = loaded.CustomPack;
+            Settings.GenerateShuntingSignals = loaded.GenerateShuntingSignals;
+            Settings.UseVerboseLogging = loaded.UseVerboseLogging;
+            Settings.EnableSignalEnforcement = loaded.EnableSignalEnforcement;
+            Settings.EnableMisalignedTrackOccupancy = loaded.EnableMisalignedTrackOccupancy;
+        }
+
+        private static void DrawGUI(UnityModManager.ModEntry entry)
+        {
+            if (Settings.MPActive)
+            {
+                GUILayout.Label("<color=red>Settings are controlled by the host during multiplayer. Local changes will not be saved.</color>");
+            }
+
+            GUI.enabled = !Settings.MPActive;
+            Settings.Draw(entry);
+            GUI.enabled = true;
         }
     }
 }
