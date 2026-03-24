@@ -91,6 +91,8 @@ namespace Signals.Game.Controllers
             _hover = def.GetComponent<SignalHover>();
             _hover.Initialise(def.OffStateHUDSprite);
 
+            SignalPassingDetector.Attach(this);
+
             TrackChecker.OnMapBuilt += FixPositionDueToCrossing;
             SignalManager.Instance.RegisterSignal(this);
         }

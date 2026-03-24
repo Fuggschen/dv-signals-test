@@ -32,6 +32,7 @@
 		<Reference Include="DV.ThingTypes" />
 		<Reference Include="DV.UI" />
 		<Reference Include="DV.Utils" />
+		<Reference Include="DV.BrakeSystem" />
 		<Reference Include="BezierCurves" />
 	</ItemGroup>
 </Project>
