@@ -8,14 +8,19 @@ namespace Signals.Game
     {
         [Draw("Custom Pack", Tooltip = "The mod ID of a custom signals pack")]
         public string CustomPack = string.Empty;
-        [Draw("Generate Shunting Signals")]
+
+        // Disabled since the provided pack has no shunting signals
+        //[Draw("Generate Shunting Signals")]
         public bool GenerateShuntingSignals = false;
+
         [Draw("Use Verbose Logging", Tooltip = "Logs a lot more information\n" +
             "Useful if you are experiencing bugs")]
         public bool UseVerboseLogging = false;
+
         // Disabled for now until there is a good way to detect trains passing signals at danger without causing false positives
         //[Draw("Enable Signal Enforcement", Tooltip = "Applies emergency brakes when a train passes a signal at danger (DisallowPassing aspect)")]
         public bool EnableSignalEnforcement = false;
+        
         [Draw("Enable Misaligned Track Occupancy", Tooltip = "Marks signals on unselected junction branches as occupied, blocking routes through misaligned switches")]
         public bool EnableMisalignedTrackOccupancy = false;
 
