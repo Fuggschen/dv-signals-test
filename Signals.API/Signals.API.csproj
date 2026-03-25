@@ -13,6 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Reference Include="DV.RailTrack" />
 		<Reference Include="UnityEngine.CoreModule" />
 	</ItemGroup>
 </Project>

@@ -254,6 +254,32 @@ SignalsAPI.TurnOffSignal("S-0370-MF-T");
 
 ---
 
+#### `IsTrackOccupied`
+
+```csharp
+public static bool IsTrackOccupied(RailTrack track)
+```
+
+Checks whether the given track has any trains physically on it. This only detects **real occupancy** (train bogies on the rail). It does not include virtual/pseudo-occupancy used internally by the signal system (e.g. misaligned junction blocking).
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `track` | `RailTrack` | Yes | The track to check. |
+
+| | |
+|---|---|
+| **Returns** | `bool` — `true` if at least one train bogie is on the track; `false` otherwise. |
+
+**Example**
+
+```csharp
+RailTrack track = /* obtain a RailTrack reference */;
+bool occupied = SignalsAPI.IsTrackOccupied(track);
+Debug.Log($"Track occupied: {occupied}");
+```
+
+---
+
 ### SignalsAPI Events
 
 #### `Loaded`
@@ -293,6 +319,7 @@ The full API contract. Obtain an instance via `SignalsAPI.Instance`.
 | `SetSignalAspect` | `bool SetSignalAspect(string signalId, string aspectId)` | Sets a signal's aspect and enters Manual mode. |
 | `SetSignalMode` | `bool SetSignalMode(string signalId, SignalMode mode)` | Changes a signal's operating mode. |
 | `TurnOffSignal` | `bool TurnOffSignal(string signalId)` | Turns off a signal (enters Manual mode). |
+| `IsTrackOccupied` | `bool IsTrackOccupied(RailTrack track)` | Checks whether a track has any trains physically on it. |
 
 ### ISignalsAPI Events
 

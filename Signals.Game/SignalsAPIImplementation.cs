@@ -89,6 +89,11 @@ namespace Signals.Game
             return signal.TurnOff();
         }
 
+        public bool IsTrackOccupied(RailTrack track)
+        {
+            return track.HasBogies();
+        }
+
         internal void SubscribeToSignal(BasicSignalController signal)
         {
             if (!_subscribedSignals.Add(signal)) return;

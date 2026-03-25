@@ -46,6 +46,15 @@ namespace Signals.API
         bool TurnOffSignal(string signalId);
 
         /// <summary>
+        /// Checks whether the given track has any trains physically on it.
+        /// This only detects real occupancy (bogies on the rail), not virtual/pseudo-occupancy
+        /// used internally by the signal system.
+        /// </summary>
+        /// <param name="track">The track to check.</param>
+        /// <returns><see langword="true"/> if at least one train bogie is on the track.</returns>
+        bool IsTrackOccupied(RailTrack track);
+
+        /// <summary>
         /// Fired when any signal's aspect changes, whether by automatic logic or manual override.
         /// The <see cref="SignalState"/> snapshot reflects the state after the change.
         /// </summary>

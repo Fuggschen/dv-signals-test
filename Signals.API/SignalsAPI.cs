@@ -73,5 +73,11 @@ namespace Signals.API
         /// </summary>
         public static bool TurnOffSignal(string signalId) =>
             _instance?.TurnOffSignal(signalId) ?? false;
+
+        /// <summary>
+        /// Checks whether the given track has any trains physically on it.
+        /// </summary>
+        public static bool IsTrackOccupied(RailTrack track) =>
+            _instance?.IsTrackOccupied(track) ?? false;
     }
 }
