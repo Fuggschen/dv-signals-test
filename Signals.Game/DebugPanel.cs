@@ -113,6 +113,36 @@ namespace Signals.Game
 
             GUILayout.Space(4);
 
+            // Track occupancy check
+            if (GUILayout.Button("Check Track Occupancy (for Signal ID)", GUILayout.Width(300)))
+            {
+                if (!SignalManager.Instance.TryGetSignal(_signalId, out var sig) || sig == null)
+                {
+                    _status = $"Signal '{_signalId}' not found for track check.";
+                }
+                else if (sig.TrackInfo?.Tracks == null || sig.TrackInfo.Tracks.Length == 0)
+                {
+                    _status = $"Signal '{_signalId}' has no track info.";
+                }
+                else
+                {
+                    var tracks = sig.TrackInfo.Tracks;
+                    _status = $"Checking {tracks.Length} track(s) for '{_signalId}':";
+                    SignalsMod.Log($"[API Debug] === Track Occupancy for '{_signalId}' ({tracks.Length} tracks) ===");
+                    for (int i = 0; i < tracks.Length; i++)
+                    {
+                        bool occupied = SignalsAPI.IsTrackOccupied(tracks[i]);
+                        var line = $"  [{i}] {tracks[i].name}: {(occupied ? "OCCUPIED" : "clear")}";
+                        SignalsMod.Log($"[API Debug] {line}");
+                        if (occupied)
+                            _status += $"\n  [{i}] {tracks[i].name}: OCCUPIED";
+                    }
+                }
+                SignalsMod.Log($"[API Debug] TrackOccupancy: {_status}");
+            }
+
+            GUILayout.Space(4);
+
             // Event subscription toggle
             var newSub = GUILayout.Toggle(_eventsSubscribed, "Subscribe to API events (logs changes)");
             if (newSub != _eventsSubscribed)
