@@ -1,22 +1,26 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 using UnityModManagerNet;
 
 namespace Signals.Game
 {
+    public enum DebugMode
+    {
+        None,
+        HoveredSignal,
+        All
+    }
+
     public class Settings : UnityModManager.ModSettings, IDrawable
     {
         // Disabled since we don't support using custom packs in ops
         //[Draw("Custom Pack", Tooltip = "The mod ID of a custom signals pack")]
         public string CustomPack = string.Empty;
-
-        // Disabled since the provided pack has no shunting signals
-        //[Draw("Generate Shunting Signals")]
-        public bool GenerateShuntingSignals = false;
-
         [Draw("Use Verbose Logging", Tooltip = "Logs a lot more information\n" +
             "Useful if you are experiencing bugs")]
         public bool UseVerboseLogging = false;
+        [Draw("Show Debug Blocks", Tooltip = "Shows where each signal's tracks start and end")]
+        public DebugMode DebugBlocks = DebugMode.None;
 
         [Draw("Enable Signal Enforcement", Tooltip = "Plays an alarm when a train passes a signal at danger (DisallowPassing aspect).\nEnable the traction-type settings below to also apply emergency brakes.")]
         public bool EnableSignalEnforcement = false;
@@ -60,3 +64,4 @@ namespace Signals.Game
         public void OnChange() { }
     }
 }
+

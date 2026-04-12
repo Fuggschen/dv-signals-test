@@ -1,3 +1,6 @@
+﻿using HarmonyLib;
+using System.Reflection;
+using UnityModManagerNet;
 ﻿using UnityModManagerNet;
 using UnityEngine;
 
@@ -38,6 +41,8 @@ namespace Signals.Game
             WorldStreamingInit.LoadingStatusChanged += SignalManager.CheckStartCreation;
 
             MultiplayerShim.Initialize();
+            var harmony = new Harmony(modEntry.Info.Id);
+            harmony.PatchAll(Assembly.GetExecutingAssembly());
 
             return true;
         }
@@ -142,3 +147,4 @@ namespace Signals.Game
         }
     }
 }
+

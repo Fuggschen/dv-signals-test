@@ -1,5 +1,6 @@
 ﻿using Signals.Common.Aspects;
 using Signals.Game.Controllers;
+using Signals.Game.Railway;
 using System.Linq;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace Signals.Game.Aspects
         private int? _animationId;
 
         public string Id => Definition.Id;
-        public TrackInfo? ControllerTrackInfo => Controller.TrackInfo;
+        public TrackBlock? ControllerTrackBlock => Controller.Block;
         public bool Active { get; private set; }
         public bool ShouldDisplayHUD => Active && Definition.HUDSprite != null;
 

@@ -1,4 +1,4 @@
-﻿using Signals.Common.Aspects;
+using Signals.Common.Aspects;
 using Signals.Game.Aspects;
 using Signals.Game.Controllers;
 using System;
@@ -23,7 +23,10 @@ namespace Signals.Game
             {
                 { typeof(OpenAspectDefinition), (x, y) => new OpenAspect(x, y) },
                 { typeof(TrainDetectedAspectDefinition), (x, y) => new TrainDetectedAspect(x, y) },
+                { typeof(TrackReservedAspectDefinition), (x, y) => new TrackReservedAspect(x, y) },
                 { typeof(IsNextAspectAspectDefinition), (x, y) => new IsNextAspectAspect(x, y) },
+                { typeof(IsNextAspectAnyAspectDefinition), (x, y) => new IsNextAspectAnyAspect(x, y) },
+                { typeof(JunctionBranchAspectDefinition), (x, y) => new JunctionBranchAspect(x, y) }
                 { typeof(JunctionBranchAspectDefinition), (x, y) => new JunctionBranchAspect(x, y) },
                 { typeof(JunctionAlignmentAspectDefinition), (x, y) => new JunctionAlignmentAspect(x, y) },
                 { typeof(SignalModeAspectDefinition), (x, y) => new SignalModeAspect(x, y) },
@@ -100,3 +103,4 @@ namespace Signals.Game
         }
     }
 }
+

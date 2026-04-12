@@ -1,5 +1,9 @@
 ﻿using DV.Logic.Job;
+using DV.PointSet;
 using Signals.Common;
+using Signals.Game.Controllers;
+using Signals.Game.Railway;
+using Signals.Game.Util;
 using System.Linq;
 using UnityEngine;
 
@@ -14,6 +18,8 @@ namespace Signals.Game
         public static bool IsOut(this TrackDirection direction) => direction == TrackDirection.Out;
 
         public static TrackDirection Flipped(this TrackDirection direction) => direction == TrackDirection.Out ? TrackDirection.In : TrackDirection.Out;
+
+        public static bool IsFullyManual(this SignalOperationMode mode) => mode == SignalOperationMode.FullManual;
 
         #endregion
 
@@ -41,27 +47,23 @@ namespace Signals.Game
             return controller;
         }
 
-        public static SignalControllerDefinition? GetForType(this SignalPack pack, SignalType type, bool old) => type switch
-        {
-            SignalType.Mainline => old ? pack.OldSignal : pack.Signal,
-            SignalType.IntoYard => old ? pack.OldIntoYardSignal : pack.IntoYardSignal,
-            SignalType.Shunting => old ? pack.OldShuntingSignal : pack.ShuntingSignal,
-            SignalType.Distant => old ? pack.OldDistantSignal : pack.DistantSignal,
-            _ => null,
-        };
-
         #endregion
 
         #region Track
 
-        public static bool IsOccupied(this RailTrack track, CrossingCheckMode check)
+        public static bool IsOccupied(this RailTrack track, CrossingCheckMode crossingMode)
         {
-            return TrackChecker.IsOccupied(track, check);
+            return TrackChecker.IsOccupied(track, crossingMode);
         }
 
         public static bool HasBogies(this RailTrack track)
         {
             return track.BogiesOnTrack().Count() > 0;
+        }
+
+        public static bool IsReservedByAnother(this RailTrack track, BasicSignalController signal, CrossingCheckMode crossingMode)
+        {
+            return TrackChecker.IsReservedByAnother(track, signal, crossingMode);
         }
 
         public static double GetLength(this RailTrack track)
@@ -83,9 +85,19 @@ namespace Signals.Game
             return junction.outBranches[junction.selectedBranch];
         }
 
+        public static Branch GetDefaultBranch(this Junction junction)
+        {
+            return junction.outBranches[junction.defaultSelectedBranch];
+        }
+
         public static bool IsSetToThrough(this Junction junction)
         {
             return junction.GetCurrentBranch().track.name == "[track through]";
+        }
+
+        public static RailTrack[] GetAllTracks(this Junction junction)
+        {
+            return junction.outBranches.Select(x => x.track).ToArray();
         }
 
         #endregion
@@ -102,6 +114,16 @@ namespace Signals.Game
         {
             var size = bounds.size;
             return size.x * size.z;
+        }
+
+        public static int GetIndex(this EquiPointSet set, int index, TrackDirection direction)
+        {
+            return direction.IsOut() ? Helpers.ClampBounds(index, set.points) : Helpers.ClampBounds(set.points.Length - index - 1, set.points);
+        }
+
+        public static double GetSpan(this EquiPointSet set, double span, TrackDirection direction)
+        {
+            return Helpers.ClampD(direction.IsOut() ? span : set.span - span, 0, set.span);
         }
 
         #endregion

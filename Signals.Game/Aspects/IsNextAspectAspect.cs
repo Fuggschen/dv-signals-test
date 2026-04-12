@@ -1,9 +1,9 @@
-﻿using Signals.Common.Aspects;
+using Signals.Common.Aspects;
 using Signals.Game.Controllers;
 
 namespace Signals.Game.Aspects
 {
-    internal class IsNextAspectAspect : AspectBase
+    public class IsNextAspectAspect : AspectBase
     {
         private IsNextAspectAspectDefinition _fullDef;
 
@@ -14,7 +14,7 @@ namespace Signals.Game.Aspects
 
         public override bool MeetsConditions()
         {
-            if (ControllerTrackInfo == null || ControllerTrackInfo.NextMainlineSignal == null) return false;
+            var next = Controller.GetNextSignal();
 
             var nextSignal = ControllerTrackInfo.NextMainlineSignal;
 
@@ -32,6 +32,13 @@ namespace Signals.Game.Aspects
             }
 
             return false;
+            if (next == null) return false;
+
+            var state = next.CurrentAspect;
+
+            // Turned off signal can never meet conditions.
+            return state != null && state.Id == _fullDef.NextId;
         }
     }
 }
+
