@@ -11,7 +11,7 @@ namespace Signals.Multiplayer
             string modId,
             Action<string> log,
             Action<string> logVerbose,
-            Action<bool, bool, bool> applyClientSettings,
+            Action<bool, bool, bool, bool, bool, bool> applyClientSettings,
             Func<bool[]> getHostSettings,
             Action setMPActive,
             Action clearMPActive,
@@ -31,15 +31,19 @@ namespace Signals.Multiplayer
         /// </summary>
         public static void BroadcastHostSettings(
             bool generateShuntingSignals,
-            bool enableSignalEnforcement, 
-            bool enableMisalignedTrackOccupancy
-         )
+            bool enableSignalEnforcement,
+            bool enableMisalignedTrackOccupancy,
+            bool enableDieselEnforcement,
+            bool enableSteamEnforcement,
+            bool autoRevertManualSignals)
         {
             SignalNetworkManager.BroadcastHostSettings(
-                generateShuntingSignals, 
-                enableSignalEnforcement, 
-                enableMisalignedTrackOccupancy
-                );
+                generateShuntingSignals,
+                enableSignalEnforcement,
+                enableMisalignedTrackOccupancy,
+                enableDieselEnforcement,
+                enableSteamEnforcement,
+                autoRevertManualSignals);
         }
     }
 }

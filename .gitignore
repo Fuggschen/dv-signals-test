@@ -2,6 +2,10 @@
 Directory.Build.targets
 References/
 
+# Local builds
+*.dll
+*.zip
+
 # Local preferences
 .vscode/
 .github/

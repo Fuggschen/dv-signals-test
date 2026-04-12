@@ -1,3 +1,5 @@
+// Thanks to red_rass for this implementation
+
 using System;
 using System.Collections.Generic;
 

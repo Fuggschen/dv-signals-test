@@ -11,5 +11,8 @@ namespace Signals.Multiplayer
         public bool GenerateShuntingSignals { get; set; }
         public bool EnableSignalEnforcement { get; set; }
         public bool EnableMisalignedTrackOccupancy { get; set; }
+        public bool EnableDieselEnforcement { get; set; }
+        public bool EnableSteamEnforcement { get; set; }
+        public bool AutoRevertManualSignals { get; set; }
     }
 }

@@ -328,6 +328,8 @@ namespace Signals.Game.Controllers
                 UpdateAspect();
             }
 
+            UpdateIndicators();
+
             return true;
         }
 

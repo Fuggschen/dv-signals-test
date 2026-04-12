@@ -85,12 +85,15 @@ namespace Signals.Game
                     SignalsMod.Guid,
                     (Action<string>)SignalsMod.Log,
                     (Action<string>)SignalsMod.LogVerbose,
-                    (Action<bool, bool, bool>)ApplyClientSettings,
+                    (Action<bool, bool, bool, bool, bool, bool>)ApplyClientSettings,
                     (Func<bool[]>)(() => new bool[]
                     {
                         SignalsMod.Settings.GenerateShuntingSignals,
                         SignalsMod.Settings.EnableSignalEnforcement,
                         SignalsMod.Settings.EnableMisalignedTrackOccupancy,
+                        SignalsMod.Settings.EnableDieselEnforcement,
+                        SignalsMod.Settings.EnableSteamEnforcement,
+                        SignalsMod.Settings.AutoRevertManualSignals,
                     }),
                     (Action)(() => { SignalsMod.Settings.MPActive = true; }),
                     (Action)(() => { SignalsMod.Settings.MPActive = false; }),
@@ -136,15 +139,27 @@ namespace Signals.Game
                 SignalsMod.Settings.GenerateShuntingSignals,
                 SignalsMod.Settings.EnableSignalEnforcement,
                 SignalsMod.Settings.EnableMisalignedTrackOccupancy,
+                SignalsMod.Settings.EnableDieselEnforcement,
+                SignalsMod.Settings.EnableSteamEnforcement,
+                SignalsMod.Settings.AutoRevertManualSignals,
             });
         }
 
         // Applied on clients when a SignalSettingsPacket is received from the host.
-        private static void ApplyClientSettings(bool generateShuntingSignals, bool enableSignalEnforcement, bool enableMisalignedTrackOccupancy)
+        private static void ApplyClientSettings(
+            bool generateShuntingSignals,
+            bool enableSignalEnforcement,
+            bool enableMisalignedTrackOccupancy,
+            bool enableDieselEnforcement,
+            bool enableSteamEnforcement,
+            bool autoRevertManualSignals)
         {
             SignalsMod.Settings.GenerateShuntingSignals = generateShuntingSignals;
             SignalsMod.Settings.EnableSignalEnforcement = enableSignalEnforcement;
             SignalsMod.Settings.EnableMisalignedTrackOccupancy = enableMisalignedTrackOccupancy;
+            SignalsMod.Settings.EnableDieselEnforcement = enableDieselEnforcement;
+            SignalsMod.Settings.EnableSteamEnforcement = enableSteamEnforcement;
+            SignalsMod.Settings.AutoRevertManualSignals = autoRevertManualSignals;
             // Notify runtime listeners (e.g. SignalPassingDetector) that settings changed.
             SignalsMod.Settings.OnSettingsSaved?.Invoke(SignalsMod.Settings);
         }

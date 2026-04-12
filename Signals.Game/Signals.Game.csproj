@@ -10,6 +10,7 @@
 		<ProjectReference Include="..\Signals.Common\Signals.Common.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<Reference Include="Newtonsoft.Json" />
 		<Reference Include="Assembly-CSharp" />
 		<Reference Include="UnityModManager" />
 		<Reference Include="UnityEngine" />
@@ -19,8 +20,8 @@
 		<Reference Include="UnityEngine.CoreModule" />
 		<Reference Include="UnityEngine.IMGUIModule" />
 		<Reference Include="UnityEngine.PhysicsModule" />
-    <Reference Include="UnityEngine.UI" />
-    <Reference Include="Unity.TextMeshPro" />
+	<Reference Include="UnityEngine.UI" />
+	<Reference Include="Unity.TextMeshPro" />
 		<Reference Include="DV.Common" />
 		<Reference Include="DV.Interaction" />
 		<Reference Include="DV.Localization" />
@@ -34,5 +35,10 @@
 		<Reference Include="DV.Utils" />
 		<Reference Include="DV.BrakeSystem" />
 		<Reference Include="BezierCurves" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="..\Resources\indusi.wav">
+			<LogicalName>Signals.Game.indusi.wav</LogicalName>
+		</EmbeddedResource>
 	</ItemGroup>
 </Project>

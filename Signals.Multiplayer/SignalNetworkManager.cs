@@ -23,7 +23,7 @@ namespace Signals.Multiplayer
         private static Action<string> _logVerbose = _ => { };
 
         // Delegates provided by MultiplayerShim to bridge into Signals.Game without a hard reference.
-        private static Action<bool, bool, bool>? _applyClientSettings;
+        private static Action<bool, bool, bool, bool, bool, bool>? _applyClientSettings;
         private static Func<bool[]>? _getHostSettings;
         private static Action? _setMPActive;
         private static Action? _clearMPActive;
@@ -33,7 +33,7 @@ namespace Signals.Multiplayer
             string modId,
             Action<string> log,
             Action<string> logVerbose,
-            Action<bool, bool, bool> applyClientSettings,
+            Action<bool, bool, bool, bool, bool, bool> applyClientSettings,
             Func<bool[]> getHostSettings,
             Action setMPActive,
             Action clearMPActive,
@@ -228,7 +228,13 @@ namespace Signals.Multiplayer
         /// Called by Bootstrap.BroadcastHostSettings (relayed from MultiplayerShim via reflection) when the host saves settings.
         /// Broadcasts updated authoritative settings to all connected clients.
         /// </summary>
-        public static void BroadcastHostSettings(bool generateShuntingSignals, bool enableSignalEnforcement, bool enableMisalignedTrackOccupancy)
+        public static void BroadcastHostSettings(
+            bool generateShuntingSignals,
+            bool enableSignalEnforcement,
+            bool enableMisalignedTrackOccupancy,
+            bool enableDieselEnforcement,
+            bool enableSteamEnforcement,
+            bool autoRevertManualSignals)
         {
             if (_server == null) return;
 
@@ -237,6 +243,9 @@ namespace Signals.Multiplayer
                 GenerateShuntingSignals = generateShuntingSignals,
                 EnableSignalEnforcement = enableSignalEnforcement,
                 EnableMisalignedTrackOccupancy = enableMisalignedTrackOccupancy,
+                EnableDieselEnforcement = enableDieselEnforcement,
+                EnableSteamEnforcement = enableSteamEnforcement,
+                AutoRevertManualSignals = autoRevertManualSignals,
             };
 
             _server.SendPacketToAll(packet, reliable: true, excludeSelf: true);
@@ -255,6 +264,9 @@ namespace Signals.Multiplayer
                 GenerateShuntingSignals = vals[0],
                 EnableSignalEnforcement = vals[1],
                 EnableMisalignedTrackOccupancy = vals[2],
+                EnableDieselEnforcement = vals[3],
+                EnableSteamEnforcement = vals[4],
+                AutoRevertManualSignals = vals[5],
             };
 
             _server.SendPacketToPlayer(packet, player);
@@ -371,12 +383,18 @@ namespace Signals.Multiplayer
             _applyClientSettings?.Invoke(
                 packet.GenerateShuntingSignals,
                 packet.EnableSignalEnforcement,
-                packet.EnableMisalignedTrackOccupancy);
+                packet.EnableMisalignedTrackOccupancy,
+                packet.EnableDieselEnforcement,
+                packet.EnableSteamEnforcement,
+                packet.AutoRevertManualSignals);
 
             _logVerbose($"[MP Sync] Received settings from host: " +
                 $"GenerateShuntingSignals={packet.GenerateShuntingSignals}, " +
                 $"EnableSignalEnforcement={packet.EnableSignalEnforcement}, " +
-                $"EnableMisalignedTrackOccupancy={packet.EnableMisalignedTrackOccupancy}");
+                $"EnableMisalignedTrackOccupancy={packet.EnableMisalignedTrackOccupancy}, " +
+                $"EnableDieselEnforcement={packet.EnableDieselEnforcement}, " +
+                $"EnableSteamEnforcement={packet.EnableSteamEnforcement}, " +
+                $"AutoRevertManualSignals={packet.AutoRevertManualSignals}");
         }
 
         #endregion

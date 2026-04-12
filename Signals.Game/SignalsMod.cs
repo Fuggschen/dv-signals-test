@@ -15,6 +15,7 @@ namespace Signals.Game
         {
             Instance = modEntry;
             Settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
+            Displays.SignalNameDisplay.LoadOverrides(modEntry.Path);
             SignalManager.LoadSignals(modEntry);
 
             if (SignalManager.DefaultPack == null)
@@ -111,6 +112,7 @@ namespace Signals.Game
             Settings.GenerateShuntingSignals = loaded.GenerateShuntingSignals;
             Settings.UseVerboseLogging = loaded.UseVerboseLogging;
             Settings.EnableSignalEnforcement = loaded.EnableSignalEnforcement;
+            Settings.AutoRevertManualSignals = loaded.AutoRevertManualSignals;
             Settings.EnableMisalignedTrackOccupancy = loaded.EnableMisalignedTrackOccupancy;
         }
 
@@ -124,6 +126,19 @@ namespace Signals.Game
             GUI.enabled = !Settings.MPActive;
             Settings.Draw(entry);
             GUI.enabled = true;
+
+            // Volume slider — always accessible, even when settings are MP-locked.
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Indusi Alarm Volume", GUILayout.Width(200));
+            float newVolume = GUILayout.HorizontalSlider(Settings.IndusiVolume, 0f, 1f, GUILayout.Width(200));
+            GUILayout.Label($"{Settings.IndusiVolume * 100f:0}%", GUILayout.Width(50));
+            GUILayout.EndHorizontal();
+            if (Mathf.Abs(newVolume - Settings.IndusiVolume) > 0.001f)
+            {
+                Settings.IndusiVolume = newVolume;
+                // Bypass the MPActive guard — volume is a purely local audio preference.
+                UnityModManager.ModSettings.Save(Settings, entry);
+            }
         }
     }
 }

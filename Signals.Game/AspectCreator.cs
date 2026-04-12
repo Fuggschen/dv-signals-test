@@ -25,7 +25,9 @@ namespace Signals.Game
                 { typeof(TrainDetectedAspectDefinition), (x, y) => new TrainDetectedAspect(x, y) },
                 { typeof(IsNextAspectAspectDefinition), (x, y) => new IsNextAspectAspect(x, y) },
                 { typeof(JunctionBranchAspectDefinition), (x, y) => new JunctionBranchAspect(x, y) },
-                { typeof(JunctionAlignmentAspectDefinition), (x, y) => new JunctionAlignmentAspect(x, y) }
+                { typeof(JunctionAlignmentAspectDefinition), (x, y) => new JunctionAlignmentAspect(x, y) },
+                { typeof(SignalModeAspectDefinition), (x, y) => new SignalModeAspect(x, y) },
+                { typeof(SpeedLimitIndicatorDefinition), (x, y) => new SpeedLimitIndicator(x, y) }
             };
 
             s_defaultTypes = CreatorFunctions.Keys.ToArray();
