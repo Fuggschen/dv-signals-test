@@ -116,7 +116,10 @@ namespace Signals.Game.Railway
 
         public bool IsOccupied(CrossingCheckMode crossingMode)
         {
-            return Tracks.Any(x => x.IsOccupied(crossingMode)) || ExtraTracks.Any(x => x.IsOccupied(crossingMode));
+            // Primary tracks: full occupancy check including pseudo-trains.
+            // ExtraTracks (other junction branches): only real bogies, so pseudo-train occupancy
+            // on non-selected branches doesn't bleed into signals on the selected branch.
+            return Tracks.Any(x => x.IsOccupied(crossingMode)) || ExtraTracks.Any(x => x.HasBogies());
         }
 
         public static TrackBlock CreateUntilSignal(RailTrack starting, TrackDirection direction, bool includeShunting, BasicSignalController? ignore = null)
