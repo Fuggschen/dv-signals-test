@@ -498,14 +498,13 @@ namespace Signals.Game.Controllers
             if (Mode == mode) return false;
 
             Mode = mode;
-            ManualOperationOnly = mode == SignalMode.Manual;
 
             ModeChanged?.Invoke(Name, mode);
 
             // Re-evaluate immediately when returning to automatic.
             if (mode == SignalMode.Automatic)
             {
-                UpdateAspect();
+                UpdateAspect(true);
             }
 
             UpdateIndicators();
@@ -536,11 +535,6 @@ namespace Signals.Game.Controllers
             return false;
         }
 
-        /// <summary>
-        /// Whether the normal update cycle should be skipped or not.
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool ShouldSkipUpdate()
         public void RequestUpdate(int level)
         {
             UpdateRequested = Mathf.Max(UpdateRequested, level);

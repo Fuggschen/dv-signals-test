@@ -18,11 +18,11 @@ namespace Signals.Game.Aspects
 
         public override bool MeetsConditions()
         {
-            // TrackInfo is not available until the first UpdateAspect() call.
-            if (ControllerTrackInfo == null)
+            // Block is not available until the first UpdateBlock() call.
+            if (ControllerTrackBlock == null)
                 return false;
 
-            var tracks = ControllerTrackInfo.Tracks;
+            var tracks = ControllerTrackBlock.Tracks;
 
             if (tracks == null || tracks.Length == 0)
             {

@@ -1,7 +1,6 @@
 ﻿using DV.Utils;
 using Signals.API;
-﻿using DV.PointSet;
-using DV.Utils;
+using DV.PointSet;
 using Signals.Common;
 using Signals.Game.Controllers;
 using Signals.Game.Railway;
@@ -67,12 +66,10 @@ namespace Signals.Game
 
         private Dictionary<Junction, JunctionSignalGroup> _junctionSignals =
             new Dictionary<Junction, JunctionSignalGroup>();
-        private List<ShuntingSignalController> _shuntingSignals =
-            new List<ShuntingSignalController>();
-        private List<DistantSignalController> _distantSignals =
-            new List<DistantSignalController>();
         private List<BasicSignalController> _shuntingSignals =
             new List<BasicSignalController>();
+        private List<DistantSignalController> _distantSignals =
+            new List<DistantSignalController>();
         private List<BasicSignalController> _signalRegister =
             new List<BasicSignalController>();
         private Dictionary<string, BasicSignalController> _signalsByName =
@@ -259,7 +256,6 @@ namespace Signals.Game
             DisplayLoadingThingy();
             Instance.CreateSignals();
             s_loaded = true;
-            _loaded = true;
 
             // Build the name lookup now that all signals are fully constructed.
             Instance.BuildNameLookup();
@@ -844,21 +840,6 @@ namespace Signals.Game
 
             return list;
 
-            void CreateJunctionSignal()
-            {
-                var track = junction.inBranch.track;
-                var kpSet = track.GetKinkedPointSet();
-                var tDirJ = TrackUtils.TrackDirectionFromJunction(track, junction);
-                var tSpan = kpSet.GetSpan(JunctionPlacementDistance / 4.0f, tDirJ);
-                var index = kpSet.GetPointIndexForSpan(tSpan);
-                var point = kpSet.points[index];
-
-                var placement = new SignalPlacementInfo(track, tDirJ, index, tSpan);
-                var signal = InstantiateFromDef(def, point.position, tDirJ.IsOut() ? point.forward : -point.forward, track);
-
-                list.Add(new ShuntingSignalController(signal, junction.inBranch.track, tDirJ, placement));
-            }
-
             void CreateBranchSignals()
             {
                 EquiPointSet.Point? prev = null;
@@ -904,7 +885,9 @@ namespace Signals.Game
                     var placement = new SignalPlacementInfo(track, tDirT, index, tSpan);
                     var signal = InstantiateFromDef(def, point.position, tDirT.IsOut() ? point.forward : -point.forward, track);
 
-                    list.Add(new ShuntingSignalController(signal, track, tDirT, placement));
+                    var controller = new ShuntingSignalController(signal, track, tDirT, placement);
+                    controller.SetJunctionInfo(junction, junction.outBranches.IndexOf(branch));
+                    list.Add(controller);
                 }
             }
         }
@@ -1083,18 +1066,6 @@ namespace Signals.Game
             var signal = InstantiateFromDef(definition, point.position, isOut ? point.forward : -point.forward, placement.Track);
 
             return new DistantSignalController(signal, home, placement, distance);
-        }
-
-        private static ShuntingSignalController CreateShuntingSignalAtPoint(SignalControllerDefinition def, RailTrack track, 
-            BezierPoint point, TrackDirection dir, float offset, Junction junction, int branchIndex)
-        {
-            var backward = point.handle1.normalized;
-            var signal = Instantiate(def, point.transform, false);
-
-            signal.transform.localPosition = backward * offset;
-            signal.transform.localRotation = Quaternion.LookRotation(dir.IsOut() ? point.handle1 : -point.handle1);
-
-            return new ShuntingSignalController(signal, junction, branchIndex, track, dir);
         }
 
         #endregion
@@ -1308,7 +1279,7 @@ namespace Signals.Game
         {
             if (TryGetSignals(junction, out var pair))
             {
-                signalController = pair.GetSignal(direction);
+                signalController = direction.IsOut() ? pair.JunctionSignal : pair.ReverseJunctionSignal as JunctionSignalController;
 
                 if (signalController != null)
                 {

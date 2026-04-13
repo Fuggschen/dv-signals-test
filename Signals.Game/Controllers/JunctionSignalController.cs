@@ -46,7 +46,7 @@ namespace Signals.Game.Controllers
 
         private void JunctionSwitched(Junction.SwitchMode mode, int branch)
         {
-            if (ManualOperationOnly) return;
+            if (!ShouldUpdate()) return;
 
             // Force update the display because of junction branch updates even if
             // the state didn't change.

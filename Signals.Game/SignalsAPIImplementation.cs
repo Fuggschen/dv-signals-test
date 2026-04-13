@@ -153,8 +153,8 @@ namespace Signals.Game
                 selectedBranch = jsc.Junction.selectedBranch;
             }
 
-            var yardId = signal.TrackInfo?.NextTrackYard;
-            var trackId = signal.TrackInfo?.NextTrackNumberType;
+            var yardId = signal.Block?.Yard;
+            var trackId = signal.Block?.TrackNumber;
 
             // Normalise empty strings to null for consistent API output.
             if (string.IsNullOrEmpty(yardId)) yardId = null;

@@ -120,13 +120,13 @@ namespace Signals.Game
                 {
                     _status = $"Signal '{_signalId}' not found for track check.";
                 }
-                else if (sig.TrackInfo?.Tracks == null || sig.TrackInfo.Tracks.Length == 0)
+                else if (sig.Block?.Tracks == null || sig.Block.Tracks.Length == 0)
                 {
                     _status = $"Signal '{_signalId}' has no track info.";
                 }
                 else
                 {
-                    var tracks = sig.TrackInfo.Tracks;
+                    var tracks = sig.Block.Tracks;
                     _status = $"Checking {tracks.Length} track(s) for '{_signalId}':";
                     SignalsMod.Log($"[API Debug] === Track Occupancy for '{_signalId}' ({tracks.Length} tracks) ===");
                     for (int i = 0; i < tracks.Length; i++)

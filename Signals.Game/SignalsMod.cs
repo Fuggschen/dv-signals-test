@@ -1,7 +1,6 @@
 ﻿using HarmonyLib;
 using System.Reflection;
 using UnityModManagerNet;
-﻿using UnityModManagerNet;
 using UnityEngine;
 
 namespace Signals.Game

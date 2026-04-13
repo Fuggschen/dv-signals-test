@@ -16,6 +16,10 @@ namespace Signals.Game
         // Disabled since we don't support using custom packs in ops
         //[Draw("Custom Pack", Tooltip = "The mod ID of a custom signals pack")]
         public string CustomPack = string.Empty;
+
+        // Disabled since the provided pack has no shunting signals
+        //[Draw("Generate Shunting Signals")]
+        public bool GenerateShuntingSignals = false;
         [Draw("Use Verbose Logging", Tooltip = "Logs a lot more information\n" +
             "Useful if you are experiencing bugs")]
         public bool UseVerboseLogging = false;

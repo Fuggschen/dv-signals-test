@@ -16,28 +16,22 @@ namespace Signals.Game.Aspects
         {
             var next = Controller.GetNextSignal();
 
-            var nextSignal = ControllerTrackInfo.NextMainlineSignal;
+            if (next == null) return false;
 
-            var state = nextSignal.CurrentAspect;
+            var state = next.CurrentAspect;
 
             if (state != null && state.Id == _fullDef.NextId)
             {
                 return true;
             }
 
-            foreach (var indicator in nextSignal.AllIndicators)
+            foreach (var indicator in next.AllIndicators)
             {
                 if (indicator.Active && indicator.Id == _fullDef.NextId)
                     return true;
             }
 
             return false;
-            if (next == null) return false;
-
-            var state = next.CurrentAspect;
-
-            // Turned off signal can never meet conditions.
-            return state != null && state.Id == _fullDef.NextId;
         }
     }
 }
