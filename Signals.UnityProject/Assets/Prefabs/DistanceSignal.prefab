@@ -1,62 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &889843196312849530
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4415238050149867822}
-  - component: {fileID: 4122329559045829764}
-  m_Layer: 0
-  m_Name: DS3a
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4415238050149867822
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 889843196312849530}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 520996720467608267}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4122329559045829764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 889843196312849530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1254336726, guid: e159d93575329a545954ab139987ee92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Id: DS3a
-  HUDSprite: {fileID: 0}
-  DisallowPassing: 0
-  RequireAcknowledging: 1
-  OnLights: []
-  BlinkingLights:
-  - {fileID: 1611234631188823251}
-  LightSequences: []
-  Movers: []
-  AnimationName: 
-  AnimationTime: 1
-  DisableAnimatorAfterChanging: 1
-  ActivationAudios: []
-  NextId: S6
 --- !u!1 &896948266714342699
 GameObject:
   m_ObjectHideFlags: 0
@@ -147,14 +90,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 896948266714342699}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2086394934, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -2086394934, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers:
   - {fileID: 5361512017406345235}
-  Colour: {r: 0.9803922, g: 0.7960785, b: 0.16470589, a: 1}
+  Colour: {r: 0.9843138, g: 0.8078432, b: 0.16470589, a: 1}
   LightIntensity: 2.5
-  Lag: 0.15
+  Lag: 0.2
   Glare: {fileID: 6569207890383002499}
 --- !u!1 &1419913142322299401
 GameObject:
@@ -198,18 +141,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1419913142322299401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1464339333, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -1464339333, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Aspects:
   - {fileID: 2015924083012485862}
-  - {fileID: 4122329559045829764}
   - {fileID: 1393750536652019461}
   - {fileID: 7598313256281597939}
   - {fileID: 3768979541454455487}
   OffStateHUDSprite: {fileID: 0}
   Displays:
-  - {fileID: 3448702801463012227}
+  - {fileID: 1087130470255489093}
   Indicators: []
   Animator: {fileID: 0}
   _drawGuides: 1
@@ -224,7 +166,7 @@ GameObject:
   - component: {fileID: 5165022415178330438}
   - component: {fileID: 7406968071237311693}
   - component: {fileID: 5438565582527927396}
-  - component: {fileID: 3448702801463012227}
+  - component: {fileID: 1087130470255489093}
   m_Layer: 0
   m_Name: LocationSign
   m_TagString: Untagged
@@ -294,7 +236,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3448702801463012227
+--- !u!114 &1087130470255489093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -303,7 +245,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1986384041642581686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1696574869, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1696574869, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DisableWhenSignalIsOff: 0
@@ -351,13 +293,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2057447617680091917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1254336726, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1254336726, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS2
   HUDSprite: {fileID: 0}
   DisallowPassing: 0
-  RequireAcknowledging: 1
+  RequireAcknowledging: 0
   OnLights: []
   BlinkingLights:
   - {fileID: 2750157496228223310}
@@ -458,14 +400,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 3488824230869029584}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2086394934, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -2086394934, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers:
   - {fileID: 3240217872043490711}
-  Colour: {r: 0.12941177, g: 0.9843138, b: 0.5176471, a: 1}
+  Colour: {r: 0.06666667, g: 1, b: 0.52156866, a: 1}
   LightIntensity: 2.5
-  Lag: 0.15
+  Lag: 0.2
   Glare: {fileID: 2936609923519679477}
 --- !u!1 &4076196890937351106
 GameObject:
@@ -507,13 +449,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4076196890937351106}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1254336726, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 639069882, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS3
   HUDSprite: {fileID: 0}
   DisallowPassing: 0
-  RequireAcknowledging: 1
+  RequireAcknowledging: 0
   OnLights: []
   BlinkingLights:
   - {fileID: 1611234631188823251}
@@ -523,7 +465,9 @@ MonoBehaviour:
   AnimationTime: 1
   DisableAnimatorAfterChanging: 1
   ActivationAudios: []
-  NextId: SPEED_LIMIT_INDICATOR
+  NextIds:
+  - S6
+  - SPEED_LIMIT_INDICATOR
 --- !u!1 &4109314994594847961
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,7 +674,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 520996720467608267}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2015924083012485862
 MonoBehaviour:
@@ -741,13 +685,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4363486640744416200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1254336726, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 639069882, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS4
   HUDSprite: {fileID: 0}
   DisallowPassing: 0
-  RequireAcknowledging: 1
+  RequireAcknowledging: 0
   OnLights:
   - {fileID: 1611234631188823251}
   BlinkingLights: []
@@ -757,7 +701,9 @@ MonoBehaviour:
   AnimationTime: 1
   DisableAnimatorAfterChanging: 1
   ActivationAudios: []
-  NextId: S1
+  NextIds:
+  - S1
+  - S1c
 --- !u!1 &5098720476059198701
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,7 +813,6 @@ Transform:
   - {fileID: 2375179097212248519}
   - {fileID: 333495355437011905}
   - {fileID: 6208953839809130545}
-  - {fileID: 4415238050149867822}
   - {fileID: 295783006699768997}
   m_Father: {fileID: 1801259351839070387}
   m_RootOrder: 0
@@ -912,7 +857,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6118289716042859370}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1281099257, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1254336726, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS1
@@ -928,6 +873,7 @@ MonoBehaviour:
   AnimationTime: 1
   DisableAnimatorAfterChanging: 1
   ActivationAudios: []
+  NextId: S2
 --- !u!1 &6192577248150203541
 GameObject:
   m_ObjectHideFlags: 0

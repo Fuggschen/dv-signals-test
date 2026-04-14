@@ -90,14 +90,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 312680305574871196}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2086394934, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -2086394934, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers:
   - {fileID: 1315903293639201656}
-  Colour: {r: 0.10980393, g: 0.9921569, b: 0.5176471, a: 1}
+  Colour: {r: 0.19215688, g: 0.9725491, b: 0.52156866, a: 1}
   LightIntensity: 2.5
-  Lag: 0.15
+  Lag: 0.2
   Glare: {fileID: 180272464187151977}
 --- !u!1 &354768004389805688
 GameObject:
@@ -139,7 +139,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 354768004389805688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1281099257, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1281099257, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S2
@@ -245,12 +245,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 390055607988070406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2086394934, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -2086394934, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers:
   - {fileID: 8865535645390217666}
-  Colour: {r: 0.9686275, g: 0.054901965, b: 0.14901961, a: 1}
+  Colour: {r: 0.95294124, g: 0.0627451, b: 0.13333334, a: 1}
   LightIntensity: 2.5
   Lag: 0.2
   Glare: {fileID: 1542265345431685846}
@@ -295,25 +295,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1361881492858002136}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -812748307, guid: e159d93575329a545954ab139987ee92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Lights:
-  - {fileID: 478087931747525924}
-  - {fileID: 2675939635967109726}
-  States: 0100
-  Timing: 0.4
-  Step: 1
---- !u!114 &2546800875538746547
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1361881492858002136}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1297041900, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1297041900, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S1c
@@ -324,13 +306,31 @@ MonoBehaviour:
   - {fileID: 5987359658500742672}
   BlinkingLights: []
   LightSequences:
-  - {fileID: 3542311971506553541}
+  - {fileID: 2546800875538746547}
   Movers: []
   AnimationName: 
   AnimationTime: 1
   DisableAnimatorAfterChanging: 1
   ActivationAudios: []
   CrossingCheckMode: 1
+--- !u!114 &2546800875538746547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361881492858002136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -812748307, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Lights:
+  - {fileID: 478087931747525924}
+  - {fileID: 2675939635967109726}
+  States: 0100
+  Timing: 0.4
+  Step: 1
 --- !u!1 &1718566280247176002
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,7 +360,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8417066666385870993}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &362644944185342919
 MonoBehaviour:
@@ -371,7 +371,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1718566280247176002}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1254336726, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 639069882, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S6
@@ -387,7 +387,9 @@ MonoBehaviour:
   AnimationTime: 1
   DisableAnimatorAfterChanging: 1
   ActivationAudios: []
-  NextId: S1
+  NextIds:
+  - S1
+  - S1c
 --- !u!1 &2196399082318013004
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,14 +480,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2196399082318013004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2086394934, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -2086394934, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers:
   - {fileID: 208984793301404939}
-  Colour: {r: 0.9803922, g: 0.8000001, b: 0.14509805, a: 1}
+  Colour: {r: 0.98823535, g: 0.8078432, b: 0.16078432, a: 1}
   LightIntensity: 2.5
-  Lag: 0.15
+  Lag: 0.2
   Glare: {fileID: 3728298847848031815}
 --- !u!1 &2256389921491090848
 GameObject:
@@ -511,7 +513,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2256389921491090848}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: -0.5, z: 0}
+  m_LocalPosition: {x: -2.488, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4203397633131819077}
@@ -790,14 +792,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2477964687046563255}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2086394934, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -2086394934, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers:
   - {fileID: 7238987429859307663}
   Colour: {r: 1, g: 1, b: 1, a: 1}
   LightIntensity: 4
-  Lag: 0.1
+  Lag: 0.2
   Glare: {fileID: 8978928093081274964}
 --- !u!1 &2731255521932637930
 GameObject:
@@ -808,7 +810,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4012714683695190576}
-  - component: {fileID: 8380869695829808487}
+  - component: {fileID: 4118487949967080548}
   m_Layer: 0
   m_Name: S4
   m_TagString: Untagged
@@ -828,9 +830,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8417066666385870993}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8380869695829808487
+--- !u!114 &4118487949967080548
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -839,7 +841,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2731255521932637930}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1254336726, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1254336726, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S4
@@ -847,9 +849,9 @@ MonoBehaviour:
   DisallowPassing: 0
   RequireAcknowledging: 1
   OnLights:
-  - {fileID: 6025454363133008431}
-  BlinkingLights:
   - {fileID: 2675939635967109726}
+  BlinkingLights:
+  - {fileID: 6025454363133008431}
   LightSequences: []
   Movers: []
   AnimationName: 
@@ -868,7 +870,7 @@ GameObject:
   - component: {fileID: 7619033896483815898}
   - component: {fileID: 5249842862584294481}
   - component: {fileID: 7307174947880199416}
-  - component: {fileID: 707229759499508294}
+  - component: {fileID: 4564766393173709776}
   m_Layer: 0
   m_Name: LocationSign
   m_TagString: Untagged
@@ -938,7 +940,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &707229759499508294
+--- !u!114 &4564766393173709776
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -947,7 +949,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3855340429686484522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1696574869, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1696574869, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   DisableWhenSignalIsOff: 0
@@ -995,7 +997,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4476634817233294892}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1297041900, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: 1297041900, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S1
@@ -1004,7 +1006,6 @@ MonoBehaviour:
   RequireAcknowledging: 0
   OnLights:
   - {fileID: 5987359658500742672}
-  - {fileID: 8453266809262395387}
   BlinkingLights: []
   LightSequences: []
   Movers: []
@@ -1085,18 +1086,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 6489346659987357738}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -1464339333, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -1464339333, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Aspects:
   - {fileID: 3802314689093530016}
-  - {fileID: 2546800875538746547}
+  - {fileID: 3542311971506553541}
   - {fileID: 362644944185342919}
-  - {fileID: 8380869695829808487}
+  - {fileID: 4118487949967080548}
   - {fileID: 8671756937468107999}
   OffStateHUDSprite: {fileID: 0}
   Displays:
-  - {fileID: 707229759499508294}
+  - {fileID: 4564766393173709776}
   Indicators:
   - {fileID: 2185961946484796947}
   Animator: {fileID: 0}
@@ -1173,7 +1174,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6569855738380750754}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -549998505, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -549998505, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S0
@@ -1249,8 +1250,8 @@ Transform:
   m_Children:
   - {fileID: 5592050553734915068}
   - {fileID: 6046327411011273637}
-  - {fileID: 4012714683695190576}
   - {fileID: 6466267339563557693}
+  - {fileID: 4012714683695190576}
   - {fileID: 7241681141676791410}
   - {fileID: 952834617919394079}
   m_Father: {fileID: 5856116350289336976}
@@ -1346,14 +1347,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7279812957022374102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2086394934, guid: e159d93575329a545954ab139987ee92, type: 3}
+  m_Script: {fileID: -2086394934, guid: afe38c473dd95fb46af7aa53035862e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Renderers:
   - {fileID: 2165218457436995470}
-  Colour: {r: 0.9843138, g: 0.8000001, b: 0.15686275, a: 1}
+  Colour: {r: 0.9686275, g: 0.78823537, b: 0.15294118, a: 1}
   LightIntensity: 2.5
-  Lag: 0.15
+  Lag: 0.2
   Glare: {fileID: 579820428389075970}
 --- !u!1 &7976001863717881371
 GameObject:
