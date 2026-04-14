@@ -21,7 +21,7 @@ namespace Signals.Game.Aspects
         {
             _initialized = true;
 
-            if (!(Controller is TrackSignalController trackController)) return;
+            if (!(Controller is TrackSignalController trackController) || Controller is JunctionSignalController) return;
 
             var startingTrack = trackController.StartingTrack;
 
