@@ -504,6 +504,7 @@ namespace Signals.Game.Controllers
             // Re-evaluate immediately when returning to automatic.
             if (mode == SignalMode.Automatic)
             {
+                Operation = SignalOperationMode.Automatic;
                 UpdateAspect(true);
             }
 
@@ -524,6 +525,8 @@ namespace Signals.Game.Controllers
                 if (string.Equals(AllAspects[i].Id, aspectId, StringComparison.OrdinalIgnoreCase))
                 {
                     SetMode(SignalMode.Manual);
+                    Operation = SignalOperationMode.FullManual;
+                    ManualOverrideAspect = i;
                     ChangeAspect(i);
                     UpdateDisplays(true);
                     UpdateIndicators();
@@ -559,6 +562,15 @@ namespace Signals.Game.Controllers
         /// <param name="startPropagate">Whether this signal should propagate its updates to the signals afterwards.</param>
         public void UpdateAspect(bool startPropagate)
         {
+            // When fully manual, the aspect must not be touched by automatic evaluation.
+            // Drain the update queue and propagate so downstream signals still update.
+            if (Operation.IsFullyManual())
+            {
+                UpdateRequested = Mathf.Max(UpdateRequested - 1, 0);
+                GetNextSignal()?.RequestUpdate(startPropagate ? UpdatePropagation : UpdateRequested);
+                return;
+            }
+
             UpdateBlock();
 
             bool changed;
