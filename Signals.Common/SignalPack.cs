@@ -69,6 +69,7 @@ namespace Signals.Common
             {
                 yield return Signal;
 
+                if (JunctionSignal != null) yield return JunctionSignal;
                 if (IntoYardSignal != null) yield return IntoYardSignal;
                 if (ShuntingSignal != null) yield return ShuntingSignal;
                 if (PassengerSignal != null) yield return PassengerSignal;
@@ -80,6 +81,7 @@ namespace Signals.Common
                 }
 
                 if (OldSignal != null) yield return OldSignal;
+                if (OldJunctionSignal != null) yield return OldJunctionSignal;
                 if (OldIntoYardSignal != null) yield return OldIntoYardSignal;
                 if (OldShuntingSignal != null) yield return OldShuntingSignal;
                 if (OldPassengerSignal != null) yield return OldPassengerSignal;
