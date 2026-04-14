@@ -330,16 +330,6 @@ namespace Signals.Game
             SignalsMod.Log($"Finished creating {_distantSignals.Count} distant signal(s), " +
                 $"current total is {_signalRegister.Count} ({sw.Elapsed.TotalSeconds:F4}s)");
 
-            sw.Restart();
-            int pseudoTrainCount = 0;
-            foreach (var junction in RailTrackRegistryBase.Junctions)
-            {
-                JunctionPseudoTrainManager.GetOrCreate(junction);
-                pseudoTrainCount++;
-            }
-            sw.Stop();
-            SignalsMod.Log($"Registered {pseudoTrainCount} junction pseudo-train manager(s) ({sw.Elapsed.TotalSeconds:F4}s)");
-
             TrackChecker.StartBuildingMap();
 
             _updateCoro = StartCoroutine(UpdateRoutine());

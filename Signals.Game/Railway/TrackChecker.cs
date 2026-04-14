@@ -109,7 +109,7 @@ namespace Signals.Game.Railway
         /// <param name="crossingMode">The check behaviour if there are cached intersections for the track.</param>
         public static bool IsOccupied(RailTrack track, CrossingCheckMode crossingMode)
         {
-            if (track.HasBogies() || JunctionPseudoTrainManager.HasPseudoTrain(track))
+            if (track.HasBogies())
             {
                 return true;
             }
