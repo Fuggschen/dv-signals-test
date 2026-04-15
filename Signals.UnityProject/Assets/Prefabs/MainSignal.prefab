@@ -508,7 +508,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S1c
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: 7625534346173101609, guid: 9d9f031339cc17b45bf4f0d46faca661,
+    type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 0
   OnLights:
@@ -584,7 +585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S6
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: 21300000, guid: 4b08d557a27c299499cc0a361e795776, type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 1
   OnLights:
@@ -643,7 +644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S2
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: 21300000, guid: db73d192d8ce627498aa431d9fabafea, type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 0
   OnLights:
@@ -1063,7 +1064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisableWhenSignalIsOff: 0
   Mode: 0
-  HUDBackground: {fileID: 0}
+  HUDBackground: {fileID: 21300000, guid: c465c61074914694d86591e428ec30f6, type: 3}
   HUDTextColour: {r: 0, g: 0, b: 0, a: 1}
   Text: {fileID: 944421803430540971}
 --- !u!1 &5123387510950882147
@@ -1236,6 +1237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6022233762957601506}
   - component: {fileID: 6804565832071582780}
+  - component: {fileID: 6713460833917652338}
   m_Layer: 0
   m_Name: MainSignal
   m_TagString: Untagged
@@ -1277,7 +1279,7 @@ MonoBehaviour:
   - {fileID: 4481380921996372402}
   - {fileID: 5574037175775362873}
   - {fileID: 5867141434535498372}
-  OffStateHUDSprite: {fileID: 0}
+  OffStateHUDSprite: {fileID: 21300000, guid: 9f304e8388caaf144b49e32c9fbf6d24, type: 3}
   Displays:
   - {fileID: 6798552954477195891}
   Indicators:
@@ -1285,6 +1287,19 @@ MonoBehaviour:
   - {fileID: 8569036016344739837}
   Animator: {fileID: 0}
   _drawGuides: 1
+--- !u!65 &6713460833917652338
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6402030834337181784}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0512171, y: 6.527524, z: 0.81890845}
+  m_Center: {x: -2.3059802, y: 2.763762, z: 3.2662635}
 --- !u!1 &6415064834682670566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1416,7 +1431,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S1
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: 21300000, guid: f1c354786c6e46047b6facadcc0169db, type: 3}
   DisallowPassing: 1
   RequireAcknowledging: 0
   OnLights:
@@ -1639,7 +1654,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: S4
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: -5143637245917332639, guid: e5752b0ef7e77f94fbddbfad44d79293,
+    type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 1
   OnLights:

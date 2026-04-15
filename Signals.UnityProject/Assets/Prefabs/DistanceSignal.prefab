@@ -109,6 +109,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1801259351839070387}
   - component: {fileID: 1933944980196256521}
+  - component: {fileID: 1180286167146283305}
   m_Layer: 0
   m_Name: DistanceSignal
   m_TagString: Untagged
@@ -149,12 +150,25 @@ MonoBehaviour:
   - {fileID: 1393750536652019461}
   - {fileID: 7598313256281597939}
   - {fileID: 3768979541454455487}
-  OffStateHUDSprite: {fileID: 0}
+  OffStateHUDSprite: {fileID: 21300000, guid: 59a1ee7537b5a9243b2026e188a63614, type: 3}
   Displays:
   - {fileID: 1087130470255489093}
   Indicators: []
   Animator: {fileID: 0}
   _drawGuides: 1
+--- !u!65 &1180286167146283305
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419913142322299401}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.86912155, y: 5.514359, z: 0.57550657}
+  m_Center: {x: -2.1661081, y: 2.2571795, z: 0.17581697}
 --- !u!1 &1986384041642581686
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisableWhenSignalIsOff: 0
   Mode: 0
-  HUDBackground: {fileID: 0}
+  HUDBackground: {fileID: 21300000, guid: c465c61074914694d86591e428ec30f6, type: 3}
   HUDTextColour: {r: 0, g: 0, b: 0, a: 1}
   Text: {fileID: 4519302120402272134}
 --- !u!1 &2057447617680091917
@@ -297,7 +311,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS2
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: 4417883830948094784, guid: 6396ddc5e4c859a48970f540481b3e46,
+    type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 0
   OnLights: []
@@ -453,7 +468,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS3
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: -8187561196852396131, guid: 1a0d8fe143f3870418a4ac8df03018cd,
+    type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 0
   OnLights: []
@@ -689,7 +705,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS4
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: -7792371938975237494, guid: a23b0d8c0dd53924da481db1d8f77a7a,
+    type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 0
   OnLights:
@@ -861,7 +878,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: DS1
-  HUDSprite: {fileID: 0}
+  HUDSprite: {fileID: 21300000, guid: b6ea2ccc638568147874d1a844a5e5b2, type: 3}
   DisallowPassing: 0
   RequireAcknowledging: 0
   OnLights:
