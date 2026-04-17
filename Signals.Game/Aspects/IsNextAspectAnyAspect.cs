@@ -22,7 +22,20 @@ namespace Signals.Game.Aspects
             var state = next.CurrentAspect;
 
             // Turned off signal can never meet conditions.
-            return state != null && _fullDef.NextIds.Contains(state.Id);
+            if (state != null && _fullDef.NextIds.Contains(state.Id))
+            {
+                return true;
+            }
+
+            foreach (var indicator in next.AllIndicators)
+            {
+                if (indicator.Active && _fullDef.NextIds.Contains(indicator.Id))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
