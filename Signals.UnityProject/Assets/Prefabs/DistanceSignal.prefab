@@ -721,6 +721,7 @@ MonoBehaviour:
   NextIds:
   - S1
   - S1c
+  - S1r
 --- !u!1 &5098720476059198701
 GameObject:
   m_ObjectHideFlags: 0
