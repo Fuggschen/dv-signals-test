@@ -48,6 +48,9 @@ namespace Signals.Game
         [Draw("Enable Misaligned Track Occupancy", Tooltip = "Marks signals on unselected junction branches as occupied, blocking routes through misaligned switches")]
         public bool EnableMisalignedTrackOccupancy = false;
 
+        [Draw("Enable Reserve via Comms Radio", Tooltip = "Adds a track reservation mode to the Comms Radio, allowing trains to reserve signal blocks for a set duration.")]
+        public bool ReserveOverRemote = false;
+
         /// <summary>Set to true on clients while a multiplayer session is active. Blocks local disk saves.</summary>
         [XmlIgnore]
         public bool MPActive = false;

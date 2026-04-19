@@ -11,7 +11,7 @@ namespace Signals.Multiplayer
             string modId,
             Action<string> log,
             Action<string> logVerbose,
-            Action<bool, bool, bool, bool, bool, bool> applyClientSettings,
+            Action<bool, bool, bool, bool, bool, bool, bool> applyClientSettings,
             Func<bool[]> getHostSettings,
             Action setMPActive,
             Action clearMPActive,
@@ -35,7 +35,8 @@ namespace Signals.Multiplayer
             bool enableMisalignedTrackOccupancy,
             bool enableDieselEnforcement,
             bool enableSteamEnforcement,
-            bool autoRevertManualSignals)
+            bool autoRevertManualSignals,
+            bool reserveOverRemote)
         {
             SignalNetworkManager.BroadcastHostSettings(
                 generateShuntingSignals,
@@ -43,7 +44,20 @@ namespace Signals.Multiplayer
                 enableMisalignedTrackOccupancy,
                 enableDieselEnforcement,
                 enableSteamEnforcement,
-                autoRevertManualSignals);
+                autoRevertManualSignals,
+                reserveOverRemote);
+        }
+
+        /// <summary>Called by MultiplayerShim when a timed track reservation is created on the host.</summary>
+        public static void BroadcastReservation(string signalId, float duration)
+        {
+            SignalNetworkManager.BroadcastReservation(signalId, duration);
+        }
+
+        /// <summary>Called by MultiplayerShim when a track reservation is cleared on the host.</summary>
+        public static void BroadcastClearReservation(string signalId)
+        {
+            SignalNetworkManager.BroadcastClearReservation(signalId);
         }
     }
 }

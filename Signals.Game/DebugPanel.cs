@@ -143,6 +143,29 @@ namespace Signals.Game
 
             GUILayout.Space(4);
 
+            // Track reservation
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Reserve 30s", GUILayout.Width(150)))
+            {
+                var result = SignalsAPI.ReserveSignal(_signalId, 30f);
+                _status = result
+                    ? $"Reserved '{_signalId}' for 30 seconds."
+                    : $"Failed to reserve '{_signalId}' (not found, already reserved, or invalid).";
+                SignalsMod.Log($"[API Debug] ReserveSignal: {_status}");
+            }
+
+            if (GUILayout.Button("Clear Reservation", GUILayout.Width(150)))
+            {
+                var result = SignalsAPI.ClearSignalReservation(_signalId);
+                _status = result
+                    ? $"Cleared reservation for '{_signalId}'."
+                    : $"Signal '{_signalId}' not found.";
+                SignalsMod.Log($"[API Debug] ClearReservation: {_status}");
+            }
+            GUILayout.EndHorizontal();
+
+            GUILayout.Space(4);
+
             // Event subscription toggle
             var newSub = GUILayout.Toggle(_eventsSubscribed, "Subscribe to API events (logs changes)");
             if (newSub != _eventsSubscribed)

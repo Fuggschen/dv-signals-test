@@ -14,5 +14,6 @@ namespace Signals.Multiplayer
         public bool EnableDieselEnforcement { get; set; }
         public bool EnableSteamEnforcement { get; set; }
         public bool AutoRevertManualSignals { get; set; }
+        public bool ReserveOverRemote { get; set; }
     }
 }

@@ -79,5 +79,17 @@ namespace Signals.API
         /// </summary>
         public static bool IsTrackOccupied(RailTrack track) =>
             _instance?.IsTrackOccupied(track) ?? false;
+
+        /// <summary>
+        /// Reserves a signal's tracks for the specified duration.
+        /// </summary>
+        public static bool ReserveSignal(string signalId, float duration) =>
+            _instance?.ReserveSignal(signalId, duration) ?? false;
+
+        /// <summary>
+        /// Immediately clears any active track reservation belonging to the given signal.
+        /// </summary>
+        public static bool ClearSignalReservation(string signalId) =>
+            _instance?.ClearSignalReservation(signalId) ?? false;
     }
 }

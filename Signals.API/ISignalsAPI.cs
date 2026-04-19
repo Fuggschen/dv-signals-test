@@ -55,6 +55,21 @@ namespace Signals.API
         bool IsTrackOccupied(RailTrack track);
 
         /// <summary>
+        /// Reserves a signal's tracks for the specified duration, blocking other signals from also being reserved on those tracks.
+        /// </summary>
+        /// <param name="signalId">The unique name of the signal.</param>
+        /// <param name="duration">How long the reservation lasts, in seconds. Must be greater than 0.</param>
+        /// <returns><see langword="true"/> if the reservation was made successfully; <see langword="false"/> if the signal was not found, the duration is invalid, the API is not loaded, or another signal already holds a conflicting reservation.</returns>
+        bool ReserveSignal(string signalId, float duration);
+
+        /// <summary>
+        /// Immediately clears any active track reservation belonging to the given signal.
+        /// </summary>
+        /// <param name="signalId">The unique name of the signal.</param>
+        /// <returns><see langword="true"/> if the signal was found; <see langword="false"/> if the signal does not exist or the API is not loaded.</returns>
+        bool ClearSignalReservation(string signalId);
+
+        /// <summary>
         /// Fired when any signal's aspect changes, whether by automatic logic or manual override.
         /// The <see cref="SignalState"/> snapshot reflects the state after the change.
         /// </summary>

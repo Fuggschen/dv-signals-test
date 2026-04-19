@@ -22,6 +22,10 @@ namespace Signals.Game
         // Relay for broadcasting host settings changes to connected clients.
         private static MethodInfo? _broadcastSettingsMethod;
 
+        // Relay for broadcasting track reservation changes to connected clients.
+        private static MethodInfo? _broadcastReservationMethod;
+        private static MethodInfo? _broadcastClearReservationMethod;
+
         internal static bool IsInitialized { get; private set; }
 
         internal static void Initialize()
@@ -79,13 +83,15 @@ namespace Signals.Game
                 var init = bootstrap.GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
                 _teardownMethod = bootstrap.GetMethod("Teardown", BindingFlags.Public | BindingFlags.Static);
                 _broadcastSettingsMethod = bootstrap.GetMethod("BroadcastHostSettings", BindingFlags.Public | BindingFlags.Static);
+                _broadcastReservationMethod = bootstrap.GetMethod("BroadcastReservation", BindingFlags.Public | BindingFlags.Static);
+                _broadcastClearReservationMethod = bootstrap.GetMethod("BroadcastClearReservation", BindingFlags.Public | BindingFlags.Static);
 
                 init?.Invoke(null, new object[]
                 {
                     SignalsMod.Guid,
                     (Action<string>)SignalsMod.Log,
                     (Action<string>)SignalsMod.LogVerbose,
-                    (Action<bool, bool, bool, bool, bool, bool>)ApplyClientSettings,
+                    (Action<bool, bool, bool, bool, bool, bool, bool>)ApplyClientSettings,
                     (Func<bool[]>)(() => new bool[]
                     {
                         SignalsMod.Settings.GenerateShuntingSignals,
@@ -94,6 +100,7 @@ namespace Signals.Game
                         SignalsMod.Settings.EnableDieselEnforcement,
                         SignalsMod.Settings.EnableSteamEnforcement,
                         SignalsMod.Settings.AutoRevertManualSignals,
+                        SignalsMod.Settings.ReserveOverRemote,
                     }),
                     (Action)(() => { SignalsMod.Settings.MPActive = true; }),
                     (Action)(() => { SignalsMod.Settings.MPActive = false; }),
@@ -101,6 +108,10 @@ namespace Signals.Game
                 });
 
                 SignalsMod.Settings.OnSettingsSaved += RelayHostSettingsSaved;
+
+                // Subscribe to reservation events so the host can broadcast them to clients.
+                Railway.TrackReserver.TimedReservationMade += RelayTimedReservationMade;
+                Railway.TrackReserver.ReservationCleared += RelayReservationCleared;
 
                 IsInitialized = true;
                 SignalsMod.Log("Multiplayer signal sync loaded.");
@@ -125,6 +136,10 @@ namespace Signals.Game
             }
 
             SignalsMod.Settings.OnSettingsSaved -= RelayHostSettingsSaved;
+            Railway.TrackReserver.TimedReservationMade -= RelayTimedReservationMade;
+            Railway.TrackReserver.ReservationCleared -= RelayReservationCleared;
+            _broadcastReservationMethod = null;
+            _broadcastClearReservationMethod = null;
             _broadcastSettingsMethod = null;
             _teardownMethod = null;
             IsInitialized = false;
@@ -142,7 +157,18 @@ namespace Signals.Game
                 SignalsMod.Settings.EnableDieselEnforcement,
                 SignalsMod.Settings.EnableSteamEnforcement,
                 SignalsMod.Settings.AutoRevertManualSignals,
+                SignalsMod.Settings.ReserveOverRemote,
             });
+        }
+
+        private static void RelayTimedReservationMade(Controllers.BasicSignalController signal, float duration)
+        {
+            _broadcastReservationMethod?.Invoke(null, new object[] { signal.Name, duration });
+        }
+
+        private static void RelayReservationCleared(Controllers.BasicSignalController signal)
+        {
+            _broadcastClearReservationMethod?.Invoke(null, new object[] { signal.Name });
         }
 
         // Applied on clients when a SignalSettingsPacket is received from the host.
@@ -152,7 +178,8 @@ namespace Signals.Game
             bool enableMisalignedTrackOccupancy,
             bool enableDieselEnforcement,
             bool enableSteamEnforcement,
-            bool autoRevertManualSignals)
+            bool autoRevertManualSignals,
+            bool reserveOverRemote)
         {
             SignalsMod.Settings.GenerateShuntingSignals = generateShuntingSignals;
             SignalsMod.Settings.EnableSignalEnforcement = enableSignalEnforcement;
@@ -160,6 +187,7 @@ namespace Signals.Game
             SignalsMod.Settings.EnableDieselEnforcement = enableDieselEnforcement;
             SignalsMod.Settings.EnableSteamEnforcement = enableSteamEnforcement;
             SignalsMod.Settings.AutoRevertManualSignals = autoRevertManualSignals;
+            SignalsMod.Settings.ReserveOverRemote = reserveOverRemote;
             // Notify runtime listeners (e.g. SignalPassingDetector) that settings changed.
             SignalsMod.Settings.OnSettingsSaved?.Invoke(SignalsMod.Settings);
         }

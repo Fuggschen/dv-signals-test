@@ -1,5 +1,6 @@
 using Signals.API;
 using Signals.Game.Controllers;
+using Signals.Game.Railway;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +93,23 @@ namespace Signals.Game
         public bool IsTrackOccupied(RailTrack track)
         {
             return track.HasBogies();
+        }
+
+        public bool ReserveSignal(string signalId, float duration)
+        {
+            if (!_manager.TryGetSignal(signalId, out var signal) || signal == null || !signal.Exists)
+                return false;
+
+            return TrackReserver.ReserveForSignal(signal, duration);
+        }
+
+        public bool ClearSignalReservation(string signalId)
+        {
+            if (!_manager.TryGetSignal(signalId, out var signal) || signal == null || !signal.Exists)
+                return false;
+
+            TrackReserver.ClearFromSignal(signal);
+            return true;
         }
 
         internal void SubscribeToSignal(BasicSignalController signal)

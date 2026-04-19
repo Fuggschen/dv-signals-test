@@ -30,6 +30,9 @@ namespace Signals.Game
             Instance.OnSaveGUI += Settings.Save;
             Instance.OnUnload += Unload;
 
+            // React to settings changes at runtime (e.g. show/hide comms radio reservation mode).
+            Settings.OnSettingsSaved += OnSettingsSaved;
+
 #if DEBUG
             Instance.OnGUI += DebugPanel.Draw;
 #endif
@@ -48,6 +51,7 @@ namespace Signals.Game
 
         private static bool Unload(UnityModManager.ModEntry modEntry)
         {
+            Settings.OnSettingsSaved -= OnSettingsSaved;
             MultiplayerShim.Teardown();
 
 #if DEBUG
@@ -118,6 +122,12 @@ namespace Signals.Game
             Settings.EnableSignalEnforcement = loaded.EnableSignalEnforcement;
             Settings.AutoRevertManualSignals = loaded.AutoRevertManualSignals;
             Settings.EnableMisalignedTrackOccupancy = loaded.EnableMisalignedTrackOccupancy;
+            Settings.ReserveOverRemote = loaded.ReserveOverRemote;
+        }
+
+        private static void OnSettingsSaved(Settings s)
+        {
+            Patches.CommsRadioControllerPatches.SetReserverEnabled(s.ReserveOverRemote);
         }
 
         private static void DrawGUI(UnityModManager.ModEntry entry)

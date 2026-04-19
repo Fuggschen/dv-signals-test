@@ -23,7 +23,7 @@ namespace Signals.Multiplayer
         private static Action<string> _logVerbose = _ => { };
 
         // Delegates provided by MultiplayerShim to bridge into Signals.Game without a hard reference.
-        private static Action<bool, bool, bool, bool, bool, bool>? _applyClientSettings;
+        private static Action<bool, bool, bool, bool, bool, bool, bool>? _applyClientSettings;
         private static Func<bool[]>? _getHostSettings;
         private static Action? _setMPActive;
         private static Action? _clearMPActive;
@@ -33,7 +33,7 @@ namespace Signals.Multiplayer
             string modId,
             Action<string> log,
             Action<string> logVerbose,
-            Action<bool, bool, bool, bool, bool, bool> applyClientSettings,
+            Action<bool, bool, bool, bool, bool, bool, bool> applyClientSettings,
             Func<bool[]> getHostSettings,
             Action setMPActive,
             Action clearMPActive,
@@ -124,6 +124,7 @@ namespace Signals.Multiplayer
             _server.RegisterPacket<SignalStatePacket>((_, __) => { });
             _server.RegisterSerializablePacket<SignalFullSyncPacket>((_, __) => { });
             _server.RegisterPacket<SignalSettingsPacket>((_, __) => { });
+            _server.RegisterPacket<SignalReservationPacket>((_, __) => { });
 
             // Send full sync to joining players.
             _server.OnPlayerReady += OnPlayerReady;
@@ -222,6 +223,47 @@ namespace Signals.Multiplayer
 
         #endregion
 
+        #region Reservation Sync
+
+        /// <summary>Broadcasts a timed reservation to all connected clients.</summary>
+        public static void BroadcastReservation(string signalId, float duration)
+        {
+            if (_server == null) return;
+
+            var packet = new SignalReservationPacket { SignalId = signalId, Duration = duration };
+            _server.SendPacketToAll(packet, reliable: true, excludeSelf: true);
+            _logVerbose($"[MP Sync] Broadcast reservation: {signalId} for {duration:F0}s.");
+        }
+
+        /// <summary>Broadcasts a reservation clear to all connected clients.</summary>
+        public static void BroadcastClearReservation(string signalId)
+        {
+            if (_server == null) return;
+
+            // Duration ≤ 0 signals a clear on the receiving end.
+            var packet = new SignalReservationPacket { SignalId = signalId, Duration = 0f };
+            _server.SendPacketToAll(packet, reliable: true, excludeSelf: true);
+            _logVerbose($"[MP Sync] Broadcast clear reservation: {signalId}.");
+        }
+
+        private static void OnClientReceivedReservation(SignalReservationPacket packet)
+        {
+            if (SignalsAPI.Instance == null) return;
+
+            if (packet.Duration > 0f)
+            {
+                SignalsAPI.Instance.ReserveSignal(packet.SignalId, packet.Duration);
+            }
+            else
+            {
+                SignalsAPI.Instance.ClearSignalReservation(packet.SignalId);
+            }
+
+            _logVerbose($"[MP Sync] Received reservation: {packet.SignalId} duration={packet.Duration:F0}s.");
+        }
+
+        #endregion
+
         #region Settings Sync
 
         /// <summary>
@@ -234,7 +276,8 @@ namespace Signals.Multiplayer
             bool enableMisalignedTrackOccupancy,
             bool enableDieselEnforcement,
             bool enableSteamEnforcement,
-            bool autoRevertManualSignals)
+            bool autoRevertManualSignals,
+            bool reserveOverRemote)
         {
             if (_server == null) return;
 
@@ -246,6 +289,7 @@ namespace Signals.Multiplayer
                 EnableDieselEnforcement = enableDieselEnforcement,
                 EnableSteamEnforcement = enableSteamEnforcement,
                 AutoRevertManualSignals = autoRevertManualSignals,
+                ReserveOverRemote = reserveOverRemote,
             };
 
             _server.SendPacketToAll(packet, reliable: true, excludeSelf: true);
@@ -267,6 +311,7 @@ namespace Signals.Multiplayer
                 EnableDieselEnforcement = vals[3],
                 EnableSteamEnforcement = vals[4],
                 AutoRevertManualSignals = vals[5],
+                ReserveOverRemote = vals[6],
             };
 
             _server.SendPacketToPlayer(packet, player);
@@ -292,6 +337,7 @@ namespace Signals.Multiplayer
             _client.RegisterPacket<SignalStatePacket>(OnClientReceivedState);
             _client.RegisterSerializablePacket<SignalFullSyncPacket>(OnClientReceivedFullSync);
             _client.RegisterPacket<SignalSettingsPacket>(OnClientReceivedSettings);
+            _client.RegisterPacket<SignalReservationPacket>(OnClientReceivedReservation);
 
             _log("[MP Sync] Client started, signal sync active.");
         }
@@ -386,7 +432,8 @@ namespace Signals.Multiplayer
                 packet.EnableMisalignedTrackOccupancy,
                 packet.EnableDieselEnforcement,
                 packet.EnableSteamEnforcement,
-                packet.AutoRevertManualSignals);
+                packet.AutoRevertManualSignals,
+                packet.ReserveOverRemote);
 
             _logVerbose($"[MP Sync] Received settings from host: " +
                 $"GenerateShuntingSignals={packet.GenerateShuntingSignals}, " +
@@ -394,7 +441,8 @@ namespace Signals.Multiplayer
                 $"EnableMisalignedTrackOccupancy={packet.EnableMisalignedTrackOccupancy}, " +
                 $"EnableDieselEnforcement={packet.EnableDieselEnforcement}, " +
                 $"EnableSteamEnforcement={packet.EnableSteamEnforcement}, " +
-                $"AutoRevertManualSignals={packet.AutoRevertManualSignals}");
+                $"AutoRevertManualSignals={packet.AutoRevertManualSignals}, " +
+                $"ReserveOverRemote={packet.ReserveOverRemote}");
         }
 
         #endregion

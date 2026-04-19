@@ -17,6 +17,11 @@ namespace Signals.Game.Railway
         /// </summary>
         public static Action<BasicSignalController>? ReservationMade;
         /// <summary>
+        /// Called when a timed reservation is successfully set up. Fired in addition to <see cref="ReservationMade"/>.
+        /// Parameters are the reserving signal and the duration in seconds.
+        /// </summary>
+        public static Action<BasicSignalController, float>? TimedReservationMade;
+        /// <summary>
         /// Called when a reservation is successfully cleared.
         /// </summary>
         public static Action<BasicSignalController>? ReservationCleared;
@@ -131,6 +136,7 @@ namespace Signals.Game.Railway
             }
 
             ClearFromSignalDelayed(signal, duration);
+            TimedReservationMade?.Invoke(signal, duration);
             return true;
         }
 
