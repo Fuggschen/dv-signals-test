@@ -280,6 +280,63 @@ Debug.Log($"Track occupied: {occupied}");
 
 ---
 
+#### `ReserveSignal`
+
+```csharp
+public static bool ReserveSignal(string signalId, float duration)
+```
+
+Reserves the tracks associated with a signal for the specified duration. While a reservation is active, any other signal whose block overlaps those tracks will have its `TrackReserved` aspect fire, typically showing a danger/stop aspect to prevent conflicting moves.
+
+A signal can only hold one timed reservation at a time — calling this again for the same signal replaces the existing timer. A reservation will also fail if another signal already holds a conflicting reservation on the same tracks.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `signalId` | `string` | Yes | The unique name of the signal whose tracks to reserve. |
+| `duration` | `float` | Yes | How long the reservation lasts, in seconds. Must be greater than `0`. |
+
+| | |
+|---|---|
+| **Returns** | `bool` — `true` if the reservation was made successfully; `false` if the signal was not found, `duration` is `≤ 0`, the API is not loaded, or another signal already holds a conflicting reservation on the same tracks. |
+
+> **Multiplayer note:** When the *Enable Reserve via Comms Radio* setting is enabled and reservation actions are made on the host, they are automatically broadcast to all connected clients so the reserved state is consistent everywhere.
+
+**Example**
+
+```csharp
+// Reserve for 60 seconds (e.g. a long shunting move).
+bool ok = SignalsAPI.ReserveSignal("S-0370-MF-T", 60f);
+if (!ok)
+    Debug.LogWarning("Could not reserve — tracks may already be reserved by another signal.");
+```
+
+---
+
+#### `ClearSignalReservation`
+
+```csharp
+public static bool ClearSignalReservation(string signalId)
+```
+
+Immediately clears any active track reservation belonging to the given signal, regardless of how much time remains. If the signal has no reservation, the call is a no-op but still returns `true` as long as the signal exists.
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `signalId` | `string` | Yes | The unique name of the signal whose reservation to clear. |
+
+| | |
+|---|---|
+| **Returns** | `bool` — `true` if the signal was found; `false` if the signal does not exist or the API is not loaded. |
+
+**Example**
+
+```csharp
+// Cancel a reservation early once a move is complete.
+SignalsAPI.ClearSignalReservation("S-0370-MF-T");
+```
+
+---
+
 ### SignalsAPI Events
 
 #### `Loaded`
@@ -320,6 +377,8 @@ The full API contract. Obtain an instance via `SignalsAPI.Instance`.
 | `SetSignalMode` | `bool SetSignalMode(string signalId, SignalMode mode)` | Changes a signal's operating mode. |
 | `TurnOffSignal` | `bool TurnOffSignal(string signalId)` | Turns off a signal (enters Manual mode). |
 | `IsTrackOccupied` | `bool IsTrackOccupied(RailTrack track)` | Checks whether a track has any trains physically on it. |
+| `ReserveSignal` | `bool ReserveSignal(string signalId, float duration)` | Reserves a signal's tracks for the given number of seconds. |
+| `ClearSignalReservation` | `bool ClearSignalReservation(string signalId)` | Immediately cancels any active reservation for the given signal. |
 
 ### ISignalsAPI Events
 
@@ -525,6 +584,29 @@ SignalsAPI.Loaded += () =>
     };
 };
 ```
+
+### Reserve a signal's tracks during a shunting move
+
+```csharp
+// Reserve as soon as the move starts, then release when it finishes.
+IEnumerator ExecuteShuntingMove(string signalId)
+{
+    bool reserved = SignalsAPI.ReserveSignal(signalId, 120f);
+    if (!reserved)
+    {
+        Debug.LogWarning($"Could not reserve {signalId} — aborting move.");
+        yield break;
+    }
+
+    // ... perform the shunting move ...
+    yield return MoveLocomotive();
+
+    // Release early once done — no need to wait for the full 120 s.
+    SignalsAPI.ClearSignalReservation(signalId);
+}
+```
+
+---
 
 ### Query a signal's full context
 
