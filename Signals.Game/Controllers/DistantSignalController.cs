@@ -16,9 +16,11 @@ namespace Signals.Game.Controllers
             {
                 _home.AspectChanged -= UpdateFromHome;
                 _home.DisplaysUpdated -= UpdateDisplaysFromHome;
+                _home.IndicatorsUpdated -= UpdateAspectFromHomeIndicators;
                 _home = value;
                 _home.AspectChanged += UpdateFromHome;
                 _home.DisplaysUpdated += UpdateDisplaysFromHome;
+                _home.IndicatorsUpdated += UpdateAspectFromHomeIndicators;
             }
         }
         public float Distance { get; private set; }
@@ -31,6 +33,7 @@ namespace Signals.Game.Controllers
 
             _home.AspectChanged += UpdateFromHome;
             _home.DisplaysUpdated += UpdateDisplaysFromHome;
+            _home.IndicatorsUpdated += UpdateAspectFromHomeIndicators;
 
             Distance = distance;
             Type = SignalType.Distant;
@@ -42,5 +45,10 @@ namespace Signals.Game.Controllers
         private void UpdateFromHome(AspectBase? aspect) => UpdateAspect(false);
 
         private void UpdateDisplaysFromHome(InfoDisplay[] obj) => UpdateDisplays(true);
+
+        // Re-evaluate after the home signal's indicators are updated, since AspectChanged
+        // fires before UpdateIndicators() runs on the home signal. Without this, the distant
+        // signal reads stale indicator state and can show the wrong aspect.
+        private void UpdateAspectFromHomeIndicators() => UpdateAspect(false);
     }
 }

@@ -109,6 +109,7 @@ namespace Signals.Game.Controllers
 
         public Action<AspectBase?>? AspectChanged;
         public Action<InfoDisplay[]>? DisplaysUpdated;
+        public Action? IndicatorsUpdated;
         public Action<BasicSignalController>? Destroyed;
         public Action<string, SignalMode>? ModeChanged;
 
@@ -486,6 +487,8 @@ namespace Signals.Game.Controllers
                     item.Apply();
                 }
             }
+
+            IndicatorsUpdated?.Invoke();
         }
 
         /// <summary>
