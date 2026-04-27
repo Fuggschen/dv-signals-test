@@ -1,5 +1,6 @@
 ﻿using Signals.Common;
 using Signals.Game.Railway;
+using System.Collections.Generic;
 
 namespace Signals.Game.Controllers
 {
@@ -10,6 +11,14 @@ namespace Signals.Game.Controllers
 
         public RailTrack StartingTrack { get; protected set; }
         public TrackDirection Direction { get; protected set; }
+
+        /// <summary>
+        /// Junctions (and their required branch indices) absorbed into this signal via the merge pass.
+        /// Used so <see cref="Aspects.TrainDetectedAspect"/> can check alignment on every junction
+        /// in the chain, not just the one directly behind the signal's <see cref="StartingTrack"/>.
+        /// </summary>
+        public List<(Junction junction, int branchIndex)> AdditionalJunctions { get; } =
+            new List<(Junction junction, int branchIndex)>();
 
         public TrackSignalController(SignalControllerDefinition def, RailTrack starting, TrackDirection startingDirection, SignalPlacementInfo info) :
             base(def, info)

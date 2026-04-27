@@ -52,13 +52,45 @@ namespace Signals.Game.Aspects
         {
             if (!_initialized) Initialize();
 
-            if (_junction != null && SignalsMod.Settings.EnableMisalignedTrackOccupancy &&
-                _junction.selectedBranch != _branchIndex)
-            {
-                return true;
-            }
-
             var block = ControllerTrackBlock;
+
+            if (SignalsMod.Settings.EnableMisalignedTrackOccupancy)
+            {
+                // Check the primary junction (from the signal's own StartingTrack).
+                if (_junction != null && _junction.selectedBranch != _branchIndex)
+                {
+                    return true;
+                }
+
+                // Walk every track in the block and check each junction for alignment.
+                // When signals are merged because junctions are tightly spaced, the block
+                // may span multiple junctions between the exit and entrance signals.
+                // Each junction must be aligned to the branch the block's route follows.
+                if (block != null)
+                {
+                    foreach (var track in block.Tracks)
+                    {
+                        if (!track.isJunctionTrack) continue;
+
+                        // Skip the primary junction — already checked above.
+                        var junction = track.inJunction;
+                        if (junction == _junction) continue;
+
+                        for (int i = 0; i < junction.outBranches.Count; i++)
+                        {
+                            if (junction.outBranches[i].track == track)
+                            {
+                                if (junction.selectedBranch != i)
+                                {
+                                    return true;
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
             return block != null && block.IsOccupied(_fullDef.CrossingCheckMode);
         }
