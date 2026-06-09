@@ -1,4 +1,4 @@
-﻿using DV.Utils;
+using DV.Utils;
 using Signals.API;
 using DV.PointSet;
 using Signals.Common;
@@ -1228,17 +1228,27 @@ namespace Signals.Game
 
             foreach (var signal in _signalRegister)
             {
-                var name = signal.Name;
-                if (string.IsNullOrEmpty(name)) continue;
+                var baseName = signal.Name;
+                if (string.IsNullOrEmpty(baseName)) continue;
 
-                if (!_signalsByName.ContainsKey(name))
+                var uniqueName = baseName;
+
+                if (_signalsByName.ContainsKey(uniqueName))
                 {
-                    _signalsByName[name] = signal;
+                    int suffix = 2;
+
+                    do
+                    {
+                        uniqueName = $"{baseName}#{suffix}";
+                        suffix++;
+                    }
+                    while (_signalsByName.ContainsKey(uniqueName));
+
+                    signal.NameOverride = uniqueName;
+                    SignalsMod.Warning($"Duplicate signal name '{baseName}', renamed to '{uniqueName}'.");
                 }
-                else
-                {
-                    SignalsMod.Warning($"Duplicate signal name '{name}', keeping first registered.");
-                }
+
+                _signalsByName[uniqueName] = signal;
             }
         }
 
