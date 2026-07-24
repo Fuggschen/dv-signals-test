@@ -1,6 +1,6 @@
 {
 	"Id": "DVSignals",
-	"Version": "1.1.0-mp",
+	"Version": "1.1.4-mp",
 	"DisplayName": "DV Signals",
 	"Author": "Wiz, modified by Fuggschen",
 	"EntryMethod": "Signals.Game.SignalsMod.Load",
