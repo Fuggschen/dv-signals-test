@@ -483,7 +483,6 @@ MonoBehaviour:
   ActivationAudios: []
   NextIds:
   - S6
-  - SPEED_LIMIT_INDICATOR
 --- !u!1 &4109314994594847961
 GameObject:
   m_ObjectHideFlags: 0
