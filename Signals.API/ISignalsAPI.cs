@@ -70,6 +70,16 @@ namespace Signals.API
         bool ClearSignalReservation(string signalId);
 
         /// <summary>
+        /// Forces an immediate update cycle on all registered signals.
+        /// </summary>
+        /// <param name="respectDistance">
+        /// If <see langword="true"/>, only signals within the normal camera distance threshold are updated.
+        /// If <see langword="false"/>, all signals are evaluated regardless of distance to the camera.
+        /// In both cases, fully manual signals are never re-evaluated.
+        /// </param>
+        void ForceUpdateAllSignals(bool respectDistance);
+
+        /// <summary>
         /// Fired when any signal's aspect changes, whether by automatic logic or manual override.
         /// The <see cref="SignalState"/> snapshot reflects the state after the change.
         /// </summary>

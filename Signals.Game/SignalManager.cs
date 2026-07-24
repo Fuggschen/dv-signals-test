@@ -77,6 +77,7 @@ namespace Signals.Game
 
         private Coroutine? _updateCoro;
         private SignalsAPIImplementation? _apiImpl;
+        private bool _forceUpdateAll;
 
         public List<BasicSignalController> AllSignals => _signalRegister;
 
@@ -1183,8 +1184,8 @@ namespace Signals.Game
                         // Distance optimisation.
                         signal.Optimise();
 
-                        // Skip updating if not needed.
-                        var update = signal.ShouldUpdate();
+                        // Skip updating if not needed (force mode bypasses distance check).
+                        var update = _forceUpdateAll ? !signal.Operation.IsFullyManual() : signal.ShouldUpdate();
                         if (!update && !signal.HasUpdatesQueued) continue;
 
                         // Actually update.
@@ -1192,6 +1193,51 @@ namespace Signals.Game
                     }
 
                     yield return WaitFor.FixedUpdate;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Toggles the forced update mode and runs an immediate update cycle on all registered signals.
+        /// While forced mode is active, the normal update loop also bypasses camera distance checks.
+        /// When disabled, normal distance-based behaviour resumes on the next update loop cycle.
+        /// </summary>
+        /// <param name="respectDistance">
+        /// If <see langword="true"/>, disables forced mode (normal camera distance checks apply).
+        /// If <see langword="false"/>, enables forced mode (all non-manual signals are evaluated
+        /// regardless of distance to the camera, both now and on subsequent update loop cycles).
+        /// Fully manual signals are never re-evaluated in either mode.
+        /// </param>
+        public void ForceUpdateAllSignals(bool respectDistance)
+        {
+            _forceUpdateAll = !respectDistance;
+            UpdateAllSignals(respectDistance);
+        }
+
+        private void UpdateAllSignals(bool respectDistance)
+        {
+            foreach (var signal in _signalRegister)
+            {
+                if (!signal.SafetyCheck()) continue;
+
+                // Never re-evaluate fully manual signals; only drain queued updates for propagation.
+                if (signal.Operation.IsFullyManual())
+                {
+                    if (signal.HasUpdatesQueued) signal.UpdateAspect(false);
+                    continue;
+                }
+
+                if (respectDistance)
+                {
+                    // Normal path: respects camera distance check + queued updates.
+                    var update = signal.ShouldUpdate();
+                    if (!update && !signal.HasUpdatesQueued) continue;
+                    signal.UpdateAspect(update);
+                }
+                else
+                {
+                    // Forced: bypass distance check, always evaluate.
+                    signal.UpdateAspect(true);
                 }
             }
         }

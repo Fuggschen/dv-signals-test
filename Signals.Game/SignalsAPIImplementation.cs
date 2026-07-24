@@ -112,6 +112,11 @@ namespace Signals.Game
             return true;
         }
 
+        public void ForceUpdateAllSignals(bool respectDistance)
+        {
+            _manager.ForceUpdateAllSignals(respectDistance);
+        }
+
         internal void SubscribeToSignal(BasicSignalController signal)
         {
             if (!_subscribedSignals.Add(signal)) return;
